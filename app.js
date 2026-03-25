@@ -335,9 +335,9 @@ function buildFrontHTML(track) {
   const bgs = { classic:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)', minimal:'linear-gradient(135deg,#111,#333)', vintage:'linear-gradient(135deg,#3d2b1f,#6b4c35)', neon:'linear-gradient(135deg,#000,#0d0d0d)' };
   const bg = bgs[state.settings.colorScheme] || bgs.classic;
   return `<div class="card-front-preview" style="background:${bg};">
-    ${state.settings.notes ? '<div class="notes-bg"></div>' : ''}
+
     <div class="card-qr-container" id="qr-${track.id}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:9px;">QR</div></div>
-    <div class="card-front-logo">TIMETUNE</div>
+    <div class="card-front-logo">TimeTune</div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.25);border-radius:7px;pointer-events:none;"></div>' : ''}
   </div>`;
 }
@@ -354,7 +354,7 @@ function buildBackHTML(track) {
       <div class="card-title-preview">${escHtml(track.name)}</div>
       ${state.settings.album ? `<div class="card-title-preview" style="font-size:7px;opacity:.6;">${escHtml(track.album)}</div>` : ''}
       <div class="card-year-preview">${track.year || '????'}</div>
-      <div class="card-back-logo">TIMETUNE</div>
+      <div class="card-back-logo">TimeTune</div>
     </div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.15);border-radius:7px;pointer-events:none;"></div>' : ''}
   </div>`;

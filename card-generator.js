@@ -202,7 +202,7 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(settings.fontsize === 'large' ? 8 : 6.5);
   doc.setTextColor(255, 255, 255);
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.85 }));
-  doc.text('TIMETUNE', x + w / 2, y + h * 0.93, { align: 'center' });
+  doc.text('TimeTune', x + w / 2, y + h * 0.93, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
@@ -297,7 +297,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(4.5 * fs);
   doc.setFont(undefined, 'normal');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.5 }));
-  doc.text('TIMETUNE', x + w / 2, y + h * 0.93, { align: 'center' });
+  doc.text('TimeTune', x + w / 2, y + h * 0.93, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
