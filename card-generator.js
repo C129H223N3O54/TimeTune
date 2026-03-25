@@ -163,17 +163,7 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   // Background gradient
   drawGradientRect(doc, x, y, w, h, scheme.frontGradient);
 
-  // Notes pattern (subtle diagonal lines)
-  if (settings.notes) {
-    doc.setDrawColor(255, 255, 255);
-    doc.setLineWidth(0.1);
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.04 }));
-    const step = 10;
-    for (let i = -h; i < w + h; i += step) {
-      doc.line(x + i, y, x + i - h, y + h);
-    }
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
-  }
+  // Notes pattern: disabled in PDF (font rendering issues)
 
   // QR Code
   try {
