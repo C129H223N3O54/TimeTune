@@ -251,7 +251,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   const artistRgb = hexToRgb(scheme.textColor);
   doc.setTextColor(artistRgb[0], artistRgb[1], artistRgb[2]);
   doc.setFontSize(Math.max(6, Math.min(9, w / 8)) * fs);
-  doc.setFont(undefined, 'bold');
+  doc.setFont(undefined, 'normal');
   const artistLines = splitTextToFit(doc, track.artist, w - 4);
   let textY = y + h * 0.17;
   artistLines.slice(0, 2).forEach(line => {
@@ -287,7 +287,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   const whiteRgb = hexToRgb(scheme.textColor);
   doc.setTextColor(whiteRgb[0], whiteRgb[1], whiteRgb[2]);
   doc.setFontSize(yearFontSize);
-  doc.setFont(undefined, 'bold');
+  doc.setFont(undefined, 'normal');
   const yearY = y + h * 0.80;
   doc.text(yearDisplay, x + w / 2, yearY, { align: 'center' });
 

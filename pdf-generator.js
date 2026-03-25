@@ -230,7 +230,7 @@ function drawInstructionsPage(doc, pageSize) {
   // Title
   doc.setTextColor(233, 69, 96);
   doc.setFontSize(28);
-  doc.setFont(undefined, 'bold');
+  doc.setFont(undefined, 'normal');
   doc.text('TimeTune', pageSize.w / 2, 30, { align: 'center' });
 
   doc.setTextColor(200, 200, 220);
@@ -256,12 +256,11 @@ function drawInstructionsPage(doc, pageSize) {
   steps.forEach(([title, desc]) => {
     doc.setTextColor(233, 69, 96);
     doc.setFontSize(10);
-    doc.setFont(undefined, 'bold');
-    doc.text(title, 20, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(title.toUpperCase(), 20, y);
 
     doc.setTextColor(180, 180, 200);
     doc.setFontSize(9);
-    doc.setFont(undefined, 'normal');
     const lines = doc.splitTextToSize(desc, pageSize.w - 40);
     doc.text(lines, 20, y + 6);
     y += 18 + (lines.length - 1) * 4;
