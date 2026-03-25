@@ -163,20 +163,16 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   // Background gradient
   drawGradientRect(doc, x, y, w, h, scheme.frontGradient);
 
-  // Notes pattern (decorative text)
+  // Notes pattern (diagonal lines - no text/font dependency)
   if (settings.notes) {
-    doc.setFontSize(6);
-    const rgb = hexToRgb('#ffffff');
-    doc.setTextColor(rgb[0], rgb[1], rgb[2]);
-    doc.setGState(new doc.GState({ opacity: 0.06 }));
-    const noteChars = ['\u266A', '\u266B', '\u2669', '\u266C'];
-    let nx = x + 2, ny = y + 5;
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 8; col++) {
-        doc.text(noteChars[(row * 8 + col) % 4], nx + col * (w / 8), ny + row * (h / 10));
-      }
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.15);
+    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.06 }));
+    const step = 4;
+    for (let i = -h; i < w + h; i += step) {
+      doc.line(x + i, y, x + i - h, y + h);
     }
-    doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
   }
 
   // QR Code
@@ -217,7 +213,7 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   const logoRgb = hexToRgb('#ffffff');
   doc.setTextColor(logoRgb[0], logoRgb[1], logoRgb[2]);
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.6 }));
-  doc.text('\u266A  TIMETUNE', x + w / 2, y + h * 0.88, { align: 'center' });
+  doc.text('TIMETUNE', x + w / 2, y + h * 0.88, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
@@ -312,7 +308,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(4.5 * fs);
   doc.setFont(undefined, 'normal');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.5 }));
-  doc.text('\u266A TIMETUNE', x + w / 2, y + h * 0.90, { align: 'center' });
+  doc.text('TIMETUNE', x + w / 2, y + h * 0.90, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
