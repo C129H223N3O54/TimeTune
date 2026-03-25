@@ -163,12 +163,12 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   // Background gradient
   drawGradientRect(doc, x, y, w, h, scheme.frontGradient);
 
-  // Notes pattern (diagonal lines - no text/font dependency)
+  // Notes pattern (subtle diagonal lines)
   if (settings.notes) {
     doc.setDrawColor(255, 255, 255);
-    doc.setLineWidth(0.15);
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.06 }));
-    const step = 4;
+    doc.setLineWidth(0.1);
+    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.04 }));
+    const step = 10;
     for (let i = -h; i < w + h; i += step) {
       doc.line(x + i, y, x + i - h, y + h);
     }
@@ -209,11 +209,10 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Logo
-  doc.setFontSize(settings.fontsize === 'large' ? 7 : 5.5);
-  const logoRgb = hexToRgb('#ffffff');
-  doc.setTextColor(logoRgb[0], logoRgb[1], logoRgb[2]);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.6 }));
-  doc.text('TIMETUNE', x + w / 2, y + h * 0.88, { align: 'center' });
+  doc.setFontSize(settings.fontsize === 'large' ? 8 : 6.5);
+  doc.setTextColor(255, 255, 255);
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.85 }));
+  doc.text('TIMETUNE', x + w / 2, y + h * 0.90, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
