@@ -233,7 +233,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setDrawColor(255, 255, 255);
   doc.setLineWidth(0.2);
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.06 }));
-  const cx = x + w / 2, cy = y + h * 0.58;
+  const cx = x + w / 2, cy = y + h * 0.52;
   for (let r = 2; r <= 10; r += 2) doc.circle(cx, cy, r, 'S');
   doc.circle(cx, cy, 1, 'S');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
