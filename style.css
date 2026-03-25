@@ -530,7 +530,7 @@ a:hover { text-decoration: underline; }
 }
 
 .card-front-preview .notes-bg::before {
-  content: '\266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C \266A \266B \2669 \266C';
+  content: '~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ -';
   position: absolute;
   inset: 0;
   color: white;

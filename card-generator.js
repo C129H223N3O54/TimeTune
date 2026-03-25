@@ -192,7 +192,7 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
     doc.roundedRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2, 2, 2, 'F');
 
     // QR data URL
-    const qrDataUrl = await generateQRDataURL(track.hitsterUrl || track.spotifyUrl, 200, settings.colorScheme);
+    const qrDataUrl = await generateQRDataURL(track.spotifyUrl, 200, settings.colorScheme);
     doc.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
   } catch (e) {
     console.warn('QR error for', track.id, e);

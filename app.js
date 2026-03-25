@@ -337,7 +337,7 @@ function buildFrontHTML(track) {
   return `<div class="card-front-preview" style="background:${bg};">
     ${state.settings.notes ? '<div class="notes-bg"></div>' : ''}
     <div class="card-qr-container" id="qr-${track.id}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:9px;">QR</div></div>
-    <div class="card-front-logo">♪ TIMETUNE</div>
+    <div class="card-front-logo">TIMETUNE</div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.25);border-radius:7px;pointer-events:none;"></div>' : ''}
   </div>`;
 }
@@ -354,7 +354,7 @@ function buildBackHTML(track) {
       <div class="card-title-preview">${escHtml(track.name)}</div>
       ${state.settings.album ? `<div class="card-title-preview" style="font-size:7px;opacity:.6;">${escHtml(track.album)}</div>` : ''}
       <div class="card-year-preview">${track.year || '????'}</div>
-      <div class="card-back-logo">♪ TIMETUNE</div>
+      <div class="card-back-logo">TIMETUNE</div>
     </div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.15);border-radius:7px;pointer-events:none;"></div>' : ''}
   </div>`;
@@ -365,7 +365,7 @@ async function generateQRCodeForCard(wrapper, track) {
   if (!container) return;
   container.innerHTML = '';
   try {
-    new QRCode(container, { text: track.hitsterUrl || track.spotifyUrl, width: container.offsetWidth||80, height: container.offsetHeight||80, colorDark:'#000', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
+    new QRCode(container, { text: track.spotifyUrl, width: container.offsetWidth||80, height: container.offsetHeight||80, colorDark:'#000', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
   } catch(e) {
     container.innerHTML = `<div style="font-size:8px;color:#999;text-align:center;padding:4px;">${track.year||'??'}</div>`;
   }
