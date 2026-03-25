@@ -202,7 +202,7 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(settings.fontsize === 'large' ? 8 : 6.5);
   doc.setTextColor(255, 255, 255);
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.85 }));
-  doc.text('TIMETUNE', x + w / 2, y + h * 0.90, { align: 'center' });
+  doc.text('TIMETUNE', x + w / 2, y + h * 0.93, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
@@ -229,13 +229,13 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFillColor(bgRgb[0], bgRgb[1], bgRgb[2]);
   doc.rect(x, y, w, h, 'F');
 
-  // Vinyl circle watermark
+  // Vinyl circle watermark - small, centered, behind text
   doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.3);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.05 }));
-  const cx = x + w / 2, cy = y + h / 2;
-  for (let r = 4; r <= 20; r += 2.5) doc.circle(cx, cy, r, 'S');
-  doc.circle(cx, cy, 2, 'S');
+  doc.setLineWidth(0.2);
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.06 }));
+  const cx = x + w / 2, cy = y + h * 0.58;
+  for (let r = 2; r <= 10; r += 2) doc.circle(cx, cy, r, 'S');
+  doc.circle(cx, cy, 1, 'S');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Decade color bar (top)
@@ -288,7 +288,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setTextColor(whiteRgb[0], whiteRgb[1], whiteRgb[2]);
   doc.setFontSize(yearFontSize);
   doc.setFont(undefined, 'bold');
-  const yearY = y + h * 0.73;
+  const yearY = y + h * 0.76;
   doc.text(yearDisplay, x + w / 2, yearY, { align: 'center' });
 
   // Logo (bottom)
@@ -297,7 +297,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(4.5 * fs);
   doc.setFont(undefined, 'normal');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 0.5 }));
-  doc.text('TIMETUNE', x + w / 2, y + h * 0.90, { align: 'center' });
+  doc.text('TIMETUNE', x + w / 2, y + h * 0.93, { align: 'center' });
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Border
