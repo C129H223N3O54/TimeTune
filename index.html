@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TimeTune — Musikkarten Generator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230d0d1a'/><circle cx='16' cy='16' r='14' fill='none' stroke='%23e94560' stroke-width='1.5'/><circle cx='16' cy='16' r='5' fill='%23e94560'/><circle cx='16' cy='16' r='2' fill='%230d0d1a'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* CSV-specific styles */
+    .drop-zone {
+      border: 2px dashed rgba(233,69,96,0.4);
+      border-radius: 16px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(233,69,96,0.04);
+      margin-bottom: 16px;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(233,69,96,0.08);
+    }
+    .drop-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+    .drop-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .drop-sub { font-size: 13px; color: var(--text-muted); }
+
+    .exportify-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .exportify-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .exportify-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .step-badge {
+      width: 24px; height: 24px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-text { color: var(--text-muted); padding-top: 3px; }
+    .step-text strong { color: var(--text); }
+    .step-text a { color: var(--accent); }
+
+    .playlist-info-bar {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    #csv-file-input { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="url(#lg1)" stroke-width="1.5"/>
+        <circle cx="16" cy="16" r="5" fill="url(#lg1)"/>
+        <circle cx="16" cy="16" r="2" fill="#1a1a2e"/>
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0%" stop-color="#e94560"/>
+            <stop offset="100%" stop-color="#f5a623"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="logo-text">TimeTune</span>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <!-- ========== SECTION: LOGIN / UPLOAD ========== -->
+  <section id="section-login" class="section section-login">
+    <div class="hero-badge">Beta</div>
+    <h1 class="hero-title">
+      Erstelle<br/>
+      <span class="gradient-text">Musikkarten</span><br/>
+      für dein Spiel
+    </h1>
+    <p class="hero-subtitle">
+      Exportiere deine Spotify-Playlist als CSV und generiere druckfertige Karten für das chronologische Musikraten.
+    </p>
+
+    <!-- STEP 1: Exportify -->
+    <div class="exportify-box">
+      <div class="setup-header">
+        <span class="setup-icon">1️⃣</span>
+        <div>
+          <h3>Playlist exportieren</h3>
+          <p>Kostenlos via Exportify — einmalig, 30 Sekunden</p>
+        </div>
+      </div>
+      <div class="exportify-steps">
+        <div class="exportify-step">
+          <div class="step-badge">1</div>
+          <div class="step-text">Gehe zu <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong> und logge dich mit Spotify ein</div>
+        </div>
+        <div class="exportify-step">
+          <div class="step-badge">2</div>
+          <div class="step-text">Klicke bei deiner Playlist auf <strong>"Export"</strong> → CSV wird heruntergeladen</div>
+        </div>
+        <div class="exportify-step">
+          <div class="step-badge">3</div>
+          <div class="step-text">CSV-Datei hier hochladen → fertig! 🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Upload -->
+    <div class="exportify-box">
+      <div class="setup-header">
+        <span class="setup-icon">2️⃣</span>
+        <div>
+          <h3>CSV hochladen</h3>
+          <p>Drag & Drop oder klicken</p>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="drop-zone">
+        <span class="drop-icon">📄</span>
+        <div class="drop-title">CSV hier ablegen</div>
+        <div class="drop-sub">oder klicken zum Auswählen</div>
+      </div>
+      <input type="file" id="csv-file-input" accept=".csv" />
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-item"><span class="feature-icon">🎵</span><span>Spotify Playlists</span></div>
+      <div class="feature-item"><span class="feature-icon">📱</span><span>QR-Codes</span></div>
+      <div class="feature-item"><span class="feature-icon">🖨️</span><span>Druckfertig</span></div>
+      <div class="feature-item"><span class="feature-icon">🔒</span><span>Kein Server</span></div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION: TRACKS ========== -->
+  <section id="section-tracks" class="section hidden">
+
+    <!-- INFO BAR -->
+    <div id="playlist-info-bar" class="playlist-info-bar hidden"></div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <h2 class="section-title"><span id="selected-count">0</span> Karten ausgewählt</h2>
+        <input type="text" id="search-input" class="input-field input-sm" placeholder="🔍 Suchen..." />
+      </div>
+      <div class="toolbar-right">
+        <button id="select-all-btn" class="btn-ghost btn-sm">Alle</button>
+        <button id="deselect-all-btn" class="btn-ghost btn-sm">Keine</button>
+        <button id="random-btn" class="btn-ghost btn-sm">🎲 Zufällig</button>
+        <div class="select-wrapper select-sm">
+          <select id="sort-select" class="select-field">
+            <option value="playlist">Reihenfolge</option>
+            <option value="year-asc">Jahr ↑</option>
+            <option value="year-desc">Jahr ↓</option>
+            <option value="artist">Artist A–Z</option>
+            <option value="title">Titel A–Z</option>
+          </select>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="document.getElementById('section-login').classList.remove('hidden');document.getElementById('section-tracks').classList.add('hidden');">
+          ← Neue CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- YEAR FILTER -->
+    <div class="year-filter">
+      <label class="filter-label">Jahres-Filter:</label>
+      <input type="number" id="year-from" class="input-field input-xs" placeholder="Von" min="1900" max="2030" />
+      <span>—</span>
+      <input type="number" id="year-to" class="input-field input-xs" placeholder="Bis" min="1900" max="2030" />
+      <button id="apply-year-filter-btn" class="btn-ghost btn-sm">Anwenden</button>
+      <button id="reset-year-filter-btn" class="btn-ghost btn-sm">Reset</button>
+    </div>
+
+    <!-- CARDS GRID -->
+    <div id="cards-grid" class="cards-grid"></div>
+
+    <!-- SETTINGS -->
+    <div class="settings-panel">
+      <h3 class="settings-title">⚙️ Einstellungen</h3>
+      <div class="settings-grid">
+
+        <div class="setting-group">
+          <label class="setting-label">Farbschema</label>
+          <div class="radio-group">
+            <label class="radio-option active" data-scheme="classic"><input type="radio" name="color-scheme" value="classic" checked /><span class="radio-swatch swatch-classic"></span>Classic</label>
+            <label class="radio-option" data-scheme="minimal"><input type="radio" name="color-scheme" value="minimal" /><span class="radio-swatch swatch-minimal"></span>Minimal</label>
+            <label class="radio-option" data-scheme="vintage"><input type="radio" name="color-scheme" value="vintage" /><span class="radio-swatch swatch-vintage"></span>Vintage</label>
+            <label class="radio-option" data-scheme="neon"><input type="radio" name="color-scheme" value="neon" /><span class="radio-swatch swatch-neon"></span>Neon</label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Schriftgröße</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-setting="fontsize" data-value="normal">Normal</button>
+            <button class="toggle-btn" data-setting="fontsize" data-value="large">Groß 👴</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">QR-Code Größe</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-setting="qrsize" data-value="normal">Normal</button>
+            <button class="toggle-btn" data-setting="qrsize" data-value="large">Groß</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">PDF-Druck</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-setting="printmode" data-value="duplex">Duplex</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="single">Einseitig</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="front-only">Nur Vorder</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="back-only">Nur Rückseite</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Optionen</label>
+          <div class="checkbox-group">
+            <label class="checkbox-option"><input type="checkbox" id="opt-border" checked /><span class="checkmark"></span>Rahmen</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-notes" checked /><span class="checkmark"></span>Noten-Muster</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-decade-bar" checked /><span class="checkmark"></span>Jahrzehnt-Farbbalken</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-album" checked /><span class="checkmark"></span>Album-Name</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-cutlines" checked /><span class="checkmark"></span>Schnittlinien</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-instructions" /><span class="checkmark"></span>Spielanleitung (1. Seite)</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-blank-cards" /><span class="checkmark"></span>Leere Karten am Ende</label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Seitenformat</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-setting="pageformat" data-value="a4">A4</button>
+            <button class="toggle-btn" data-setting="pageformat" data-value="letter">Letter</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="pdf-stats">
+      <div class="stat-item"><span class="stat-num" id="stat-selected">0</span><span class="stat-desc">Karten</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num" id="stat-pages">0</span><span class="stat-desc">Seiten</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><span class="stat-num" id="stat-print-info">—</span><span class="stat-desc">Seiten Druck</span></div>
+    </div>
+
+    <!-- PDF BUTTON -->
+    <div class="pdf-actions">
+      <button id="generate-pdf-btn" class="btn-primary btn-xl">
+        <span class="btn-icon">📄</span> PDF erstellen
+      </button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="progress-container" class="progress-container hidden">
+      <div class="progress-label">
+        <span id="progress-text">PDF wird erstellt...</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- RANDOM MODAL -->
+<div id="random-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Zufällige Auswahl</h3>
+    <p>Wie viele zufällige Karten auswählen?</p>
+    <input type="number" id="random-count-input" class="input-field" value="50" min="1" />
+    <div class="modal-actions">
+      <button id="random-cancel-btn" class="btn-ghost">Abbrechen</button>
+      <button id="random-confirm-btn" class="btn-primary">Auswählen</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="libs/qrcode-gen.js"></script>
+<script src="libs/qrcode.min.js"></script>
+<script src="libs/jspdf.umd.min.js"></script>
+<script src="card-generator.js"></script>
+<script src="pdf-generator.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
