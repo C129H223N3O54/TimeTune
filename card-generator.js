@@ -229,13 +229,13 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFillColor(bgRgb[0], bgRgb[1], bgRgb[2]);
   doc.rect(x, y, w, h, 'F');
 
-  // Vinyl circle watermark - small, centered, behind text
+  // Vinyl circle watermark
   doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.2);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.06 }));
-  const cx = x + w / 2, cy = y + h * 0.52;
-  for (let r = 2; r <= 10; r += 2) doc.circle(cx, cy, r, 'S');
-  doc.circle(cx, cy, 1, 'S');
+  doc.setLineWidth(0.25);
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.08 }));
+  const cx = x + w / 2, cy = y + h * 0.54;
+  for (let r = 2.5; r <= 14; r += 2.5) doc.circle(cx, cy, r, 'S');
+  doc.circle(cx, cy, 1.2, 'S');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Decade color bar (top)
@@ -253,7 +253,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFontSize(Math.max(6, Math.min(9, w / 8)) * fs);
   doc.setFont(undefined, 'bold');
   const artistLines = splitTextToFit(doc, track.artist, w - 4);
-  let textY = y + h * 0.20;
+  let textY = y + h * 0.17;
   artistLines.slice(0, 2).forEach(line => {
     doc.text(line, x + w / 2, textY, { align: 'center' });
     textY += doc.getFontSize() * 0.45;
@@ -288,7 +288,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setTextColor(whiteRgb[0], whiteRgb[1], whiteRgb[2]);
   doc.setFontSize(yearFontSize);
   doc.setFont(undefined, 'bold');
-  const yearY = y + h * 0.76;
+  const yearY = y + h * 0.80;
   doc.text(yearDisplay, x + w / 2, yearY, { align: 'center' });
 
   // Logo (bottom)
