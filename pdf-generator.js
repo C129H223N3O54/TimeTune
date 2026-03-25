@@ -244,12 +244,12 @@ function drawInstructionsPage(doc, pageSize) {
   doc.line(40, 48, pageSize.w - 40, 48);
 
   const steps = [
-    ['🎯 Ziel', 'Ordne die Musikkarten chronologisch auf deiner persönlichen Musik-Zeitlinie ein.'],
-    ['🃏 Vorbereitung', 'Mische alle Karten und lege sie verdeckt in einen Stapel. Die erste Karte wird aufgedeckt und bildet den Start der Zeitlinie.'],
-    ['🎮 Spielzug', 'Decke eine Karte auf. Schätze, in welchem Jahr der Song erschienen ist, und lege die Karte an die richtige Stelle in die Zeitlinie.'],
-    ['✅ Auflösung', 'Drehe die Karte um und überprüfe das Jahr. Lag sie richtig? Du darfst sie behalten. Falsch? Sie wandert zurück.'],
-    ['🏆 Gewinner', 'Wer zuerst eine festgelegte Anzahl Karten gesammelt hat (z. B. 10), gewinnt!'],
-    ['📱 QR-Code', 'Scanne den QR-Code auf der Vorderseite mit deinem Smartphone, um den Song direkt auf Spotify zu hören.'],
+    ['1. Ziel', 'Ordne die Musikkarten chronologisch auf deiner persoenlichen Musik-Zeitlinie ein.'],
+    ['2. Vorbereitung', 'Mische alle Karten und lege sie verdeckt in einen Stapel. Die erste Karte wird aufgedeckt und bildet den Start der Zeitlinie.'],
+    ['3. Spielzug', 'Decke eine Karte auf. Schaetze, in welchem Jahr der Song erschienen ist, und lege die Karte an die richtige Stelle in die Zeitlinie.'],
+    ['4. Aufloesung', 'Drehe die Karte um und ueberpruefe das Jahr. Lag sie richtig? Du darfst sie behalten. Falsch? Sie wandert zurueck.'],
+    ['5. Gewinner', 'Wer zuerst eine festgelegte Anzahl Karten gesammelt hat (z. B. 10), gewinnt!'],
+    ['6. QR-Code', 'Scanne den QR-Code auf der Vorderseite mit deinem Smartphone, um den Song direkt auf Spotify zu hoeren.'],
   ];
 
   let y = 62;
@@ -270,7 +270,7 @@ function drawInstructionsPage(doc, pageSize) {
   // Footer
   doc.setTextColor(100, 100, 120);
   doc.setFontSize(7);
-  doc.text('Erstellt mit TimeTune — timetune.app', pageSize.w / 2, pageSize.h - 12, { align: 'center' });
+  doc.text('Erstellt mit TimeTune', pageSize.w / 2, pageSize.h - 12, { align: 'center' });
 }
 
 // ============================================
