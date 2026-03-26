@@ -135,7 +135,9 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
 
   // QR Code
   try {
-    const qrSize = settings.qrsize === 'large' ? Math.min(w,h)*0.65 : Math.min(w,h)*0.55;
+    const qrSize = settings.qrsize === 'large' ? Math.min(w,h)*0.65
+      : settings.qrsize === 'small' ? Math.min(w,h)*0.40
+      : Math.min(w,h)*0.55;
     const qrX = x + (w - qrSize) / 2;
     const qrY = y + h * 0.10;
     const padding = 2;

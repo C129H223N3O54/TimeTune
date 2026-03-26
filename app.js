@@ -324,12 +324,23 @@ function applyFilterAndSort() {
 
 function renderCards() {
   const grid = document.getElementById('cards-grid');
+
+  // Save which cards are currently flipped
+  const flippedIds = new Set();
+  grid.querySelectorAll('.card-preview-wrapper.flipped').forEach(el => {
+    flippedIds.add(el.dataset.id);
+  });
+
   grid.innerHTML = '';
   if (!state.filteredTracks.length) {
     grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:40px 0;">Keine Karten gefunden</p>';
     return;
   }
-  state.filteredTracks.forEach(t => grid.appendChild(createCardPreviewElement(t)));
+  state.filteredTracks.forEach(t => {
+    const el = createCardPreviewElement(t);
+    if (flippedIds.has(t.id)) el.classList.add('flipped');
+    grid.appendChild(el);
+  });
 }
 
 function createCardPreviewElement(track) {
@@ -373,9 +384,10 @@ function createCardPreviewElement(track) {
 function buildFrontHTML(track) {
   const bgs = { classic:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)', minimal:'linear-gradient(135deg,#111,#333)', vintage:'linear-gradient(135deg,#3d2b1f,#6b4c35)', neon:'linear-gradient(135deg,#000,#0d0d0d)' };
   const bg = bgs[state.settings.colorScheme] || bgs.classic;
-  const qrLarge = state.settings.qrsize === 'large';
-  const qrSize = qrLarge ? '75%' : '60%';
-  const qrMarginTop = qrLarge ? '6px' : '12px';
+  const qrSize = state.settings.qrsize === 'large' ? '75%'
+    : state.settings.qrsize === 'small' ? '45%' : '60%';
+  const qrMarginTop = state.settings.qrsize === 'large' ? '6px'
+    : state.settings.qrsize === 'small' ? '18px' : '12px';
   return `<div class="card-front-preview" style="background:${bg};">
     <div class="card-qr-container" id="qr-${track.id}" style="width:${qrSize};aspect-ratio:1;margin-top:${qrMarginTop};">
       <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:9px;">QR</div>
