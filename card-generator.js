@@ -157,7 +157,9 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
   doc.setGState && doc.setGState(new doc.GState({opacity:1}));
 
   // Logo
-  doc.setFontSize(settings.fontsize === 'large' ? 8 : 6.5);
+  doc.setFontSize(settings.fontsize === 'large' ? 9
+    : settings.fontsize === 'normal' ? 7.5
+    : 6);
   doc.setTextColor(255,255,255);
   doc.setGState && doc.setGState(new doc.GState({opacity:0.85}));
   doc.text('TimeTune', x+w/2, y+h*0.90, {align:'center'});
@@ -180,7 +182,9 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   const scheme = COLOR_SCHEMES[settings.colorScheme] || COLOR_SCHEMES.classic;
   const decadeColor = getDecadeColorForYear(track.year);
   const yearDisplay = track.year ? String(track.year) : '????';
-  const fs = settings.fontsize === 'large' ? 1.3 : 1.0;
+  const fs = settings.fontsize === 'large' ? 1.5
+          : settings.fontsize === 'normal' ? 1.15
+          : 0.85; // small
 
   // Background image
   const bgImg = generateBackBg(w, h, scheme.backBg, decadeColor);
@@ -237,7 +241,9 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
 
   // YEAR
   doc.setTextColor(255,255,255);
-  doc.setFontSize(settings.fontsize === 'large' ? 28 : 22);
+  doc.setFontSize(settings.fontsize === 'large' ? 30
+    : settings.fontsize === 'normal' ? 24
+    : 18);
   doc.setFont(undefined, 'normal');
   doc.text(yearDisplay, x+w/2, y+h*0.80, {align:'center'});
 
