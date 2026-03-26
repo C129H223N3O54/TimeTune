@@ -1,9 +1,7 @@
 // ============================================
 // TIMETUNE — card-generator.js
-// Card rendering helpers for PDF generation
 // ============================================
 
-// Decade color mapping
 function getDecadeColorForYear(year) {
   if (!year) return '#555555';
   if (year < 1960) return '#8B7355';
@@ -16,291 +14,238 @@ function getDecadeColorForYear(year) {
   return '#FF1744';
 }
 
-// Color schemes
 const COLOR_SCHEMES = {
   classic: {
-    frontBg: null, // uses gradient
     frontGradient: ['#0f0c29', '#302b63', '#24243e'],
     backBg: '#1a1a2e',
-    accentColor: '#f5a623',
     textColor: '#ffffff',
     subtextColor: '#b3b3b3',
-    logoColor: 'rgba(255,255,255,0.5)',
-    borderColor: 'rgba(245,166,35,0.4)',
-    qrBg: '#ffffff',
-    qrFg: '#000000',
+    qrBg: '#ffffff', qrFg: '#000000',
   },
   minimal: {
     frontGradient: ['#111111', '#222222', '#111111'],
     backBg: '#111111',
-    accentColor: '#ffffff',
-    textColor: '#ffffff',
-    subtextColor: '#aaaaaa',
-    logoColor: 'rgba(255,255,255,0.4)',
-    borderColor: 'rgba(255,255,255,0.2)',
-    qrBg: '#ffffff',
-    qrFg: '#000000',
+    textColor: '#ffffff', subtextColor: '#aaaaaa',
+    qrBg: '#ffffff', qrFg: '#000000',
   },
   vintage: {
     frontGradient: ['#3d2b1f', '#6b4c35', '#3d2b1f'],
     backBg: '#2a1f14',
-    accentColor: '#d4a96a',
-    textColor: '#f0e6d3',
-    subtextColor: '#c4a882',
-    logoColor: 'rgba(212,169,106,0.6)',
-    borderColor: 'rgba(212,169,106,0.5)',
-    qrBg: '#f0e6d3',
-    qrFg: '#2a1f14',
+    textColor: '#f0e6d3', subtextColor: '#c4a882',
+    qrBg: '#f0e6d3', qrFg: '#2a1f14',
   },
   neon: {
     frontGradient: ['#000000', '#0a000a', '#000000'],
     backBg: '#000000',
-    accentColor: '#ff00ff',
-    textColor: '#ffffff',
-    subtextColor: '#cc00cc',
-    logoColor: 'rgba(255,0,255,0.6)',
-    borderColor: 'rgba(255,0,255,0.5)',
-    qrBg: '#ffffff',
-    qrFg: '#000000',
+    textColor: '#ffffff', subtextColor: '#cc00cc',
+    qrBg: '#ffffff', qrFg: '#000000',
   },
 };
 
 // Generate QR code as data URL
 async function generateQRDataURL(text, size, scheme) {
   const colors = COLOR_SCHEMES[scheme] || COLOR_SCHEMES.classic;
-
   return new Promise((resolve, reject) => {
     const tempDiv = document.createElement('div');
     tempDiv.style.display = 'none';
     document.body.appendChild(tempDiv);
-
     try {
-      const qrInstance = new QRCode(tempDiv, {
-        text: text,
-        width: size,
-        height: size,
-        colorDark: colors.qrFg,
-        colorLight: colors.qrBg,
+      new QRCode(tempDiv, {
+        text, width: size, height: size,
+        colorDark: colors.qrFg, colorLight: colors.qrBg,
         correctLevel: QRCode.CorrectLevel.M,
       });
-
       setTimeout(() => {
         const canvas = tempDiv.querySelector('canvas');
         const img = tempDiv.querySelector('img');
-
-        let dataUrl = null;
-        if (canvas) {
-          dataUrl = canvas.toDataURL('image/png');
-        } else if (img) {
-          dataUrl = img.src;
-        }
-
+        const dataUrl = canvas ? canvas.toDataURL('image/png') : img?.src;
         document.body.removeChild(tempDiv);
         if (dataUrl) resolve(dataUrl);
-        else reject(new Error('QR generation failed'));
+        else reject(new Error('QR failed'));
       }, 100);
-    } catch (e) {
-      document.body.removeChild(tempDiv);
-      reject(e);
-    }
+    } catch(e) { document.body.removeChild(tempDiv); reject(e); }
   });
 }
 
-// Draw gradient rectangle on jsPDF canvas
-function drawGradientRect(doc, x, y, w, h, colors) {
-  // jsPDF doesn't support gradients natively, simulate with stripes
-  const steps = 20;
-  const stepH = h / steps;
+// Generate front background via canvas
+function generateFrontBg(w, h, gradColors) {
+  const scale = 3;
+  const pw = Math.round(w * scale), ph = Math.round(h * scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = pw; canvas.height = ph;
+  const ctx = canvas.getContext('2d');
 
-  for (let i = 0; i < steps; i++) {
-    const t = i / (steps - 1);
-    const c = lerpColors(colors, t);
-    doc.setFillColor(c[0], c[1], c[2]);
-    doc.rect(x, y + i * stepH, w, stepH + 0.5, 'F');
-  }
+  // Main diagonal gradient
+  const grad = ctx.createLinearGradient(0, 0, pw, ph);
+  grad.addColorStop(0,   gradColors[0] || '#0f0c29');
+  grad.addColorStop(0.5, gradColors[1] || '#302b63');
+  grad.addColorStop(1,   gradColors[2] || '#24243e');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, pw, ph);
+
+  // Top center bloom
+  const bloom = ctx.createRadialGradient(pw*0.5, 0, 0, pw*0.5, 0, pw*0.85);
+  bloom.addColorStop(0, 'rgba(120,100,255,0.28)');
+  bloom.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = bloom;
+  ctx.fillRect(0, 0, pw, ph);
+
+  // Bottom right warm glow
+  const corner = ctx.createRadialGradient(pw, ph, 0, pw, ph, pw*0.75);
+  corner.addColorStop(0, 'rgba(233,69,96,0.18)');
+  corner.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = corner;
+  ctx.fillRect(0, 0, pw, ph);
+
+  return canvas.toDataURL('image/png');
 }
 
-function lerpColors(hexColors, t) {
-  // For 3 colors (gradient stops at 0, 0.5, 1)
-  let i, localT;
-  if (hexColors.length === 2) {
-    i = 0; localT = t;
-  } else if (hexColors.length === 3) {
-    if (t < 0.5) { i = 0; localT = t * 2; }
-    else { i = 1; localT = (t - 0.5) * 2; }
-  } else {
-    i = 0; localT = t;
-  }
+// Generate back background via canvas
+function generateBackBg(w, h, bgColor, decadeColor) {
+  const scale = 3;
+  const pw = Math.round(w * scale), ph = Math.round(h * scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = pw; canvas.height = ph;
+  const ctx = canvas.getContext('2d');
 
-  const c1 = hexToRgb(hexColors[i]);
-  const c2 = hexToRgb(hexColors[Math.min(i + 1, hexColors.length - 1)]);
+  // Base color
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, pw, ph);
 
-  return [
-    Math.round(c1[0] + (c2[0] - c1[0]) * localT),
-    Math.round(c1[1] + (c2[1] - c1[1]) * localT),
-    Math.round(c1[2] + (c2[2] - c1[2]) * localT),
-  ];
-}
+  // Subtle decade color glow from center
+  const rgb = hexToRgb(decadeColor);
+  const glow = ctx.createRadialGradient(pw*0.5, ph*0.52, 0, pw*0.5, ph*0.52, pw*0.75);
+  glow.addColorStop(0, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.2)`);
+  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, pw, ph);
 
-function hexToRgb(hex) {
-  hex = hex.replace('#', '');
-  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-  const n = parseInt(hex, 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
-function hexToRgbObj(hex) {
-  const [r, g, b] = hexToRgb(hex);
-  return { r, g, b };
+  return canvas.toDataURL('image/png');
 }
 
 // ============================================
-// DRAW FRONT CARD on jsPDF
+// DRAW FRONT CARD
 // ============================================
 async function drawFrontCard(doc, track, x, y, w, h, settings) {
   const scheme = COLOR_SCHEMES[settings.colorScheme] || COLOR_SCHEMES.classic;
 
   // Background image
-  const frontBgImg = generateCardBg(w, h, scheme.frontGradient, 'front');
-  doc.addImage(frontBgImg, 'PNG', x, y, w, h);
-
-  // Notes pattern: disabled in PDF (font rendering issues)
+  const bgImg = generateFrontBg(w, h, scheme.frontGradient);
+  doc.addImage(bgImg, 'PNG', x, y, w, h);
 
   // QR Code
   try {
-    const qrSize = settings.qrsize === 'large' ? Math.min(w, h) * 0.65 : Math.min(w, h) * 0.55;
+    const qrSize = settings.qrsize === 'large' ? Math.min(w,h)*0.65 : Math.min(w,h)*0.55;
     const qrX = x + (w - qrSize) / 2;
     const qrY = y + h * 0.10;
-
-    // White background box for QR
     const padding = 2;
-    const { r, g, b } = hexToRgbObj(scheme.qrBg);
-    doc.setFillColor(r, g, b);
-    doc.roundedRect(qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2, 2, 2, 'F');
-
-    // QR data URL
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(qrX-padding, qrY-padding, qrSize+padding*2, qrSize+padding*2, 2, 2, 'F');
     const qrDataUrl = await generateQRDataURL(track.spotifyUrl, 200, settings.colorScheme);
     doc.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
-  } catch (e) {
-    console.warn('QR error for', track.id, e);
-    // Fallback: text QR placeholder
-    doc.setFillColor(255, 255, 255);
-    doc.rect(x + w * 0.2, y + h * 0.1, w * 0.6, w * 0.6, 'F');
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(5);
-    doc.text('SCAN', x + w / 2, y + h * 0.1 + w * 0.3, { align: 'center' });
+  } catch(e) {
+    console.warn('QR error', e);
+    doc.setFillColor(255,255,255);
+    doc.rect(x+w*0.2, y+h*0.1, w*0.6, w*0.6, 'F');
   }
 
-  // Divider line
-  const divY = y + h * 0.78;
-  doc.setDrawColor(255, 255, 255);
+  // Divider
+  doc.setDrawColor(255,255,255);
   doc.setLineWidth(0.2);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.25 }));
-  doc.line(x + w * 0.15, divY, x + w * 0.85, divY);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+  doc.setGState && doc.setGState(new doc.GState({opacity:0.25}));
+  doc.line(x+w*0.15, y+h*0.78, x+w*0.85, y+h*0.78);
+  doc.setGState && doc.setGState(new doc.GState({opacity:1}));
 
   // Logo
   doc.setFontSize(settings.fontsize === 'large' ? 8 : 6.5);
-  doc.setTextColor(255, 255, 255);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.85 }));
-  doc.text('TimeTune', x + w / 2, y + h * 0.93, { align: 'center' });
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+  doc.setTextColor(255,255,255);
+  doc.setGState && doc.setGState(new doc.GState({opacity:0.85}));
+  doc.text('TimeTune', x+w/2, y+h*0.90, {align:'center'});
+  doc.setGState && doc.setGState(new doc.GState({opacity:1}));
 
   // Border
   if (settings.border) {
-    const bRgb = hexToRgb(scheme.borderColor.replace(/rgba\([^)]+\)/, '#f5a623'));
-    doc.setDrawColor(245, 166, 35);
+    doc.setDrawColor(245,166,35);
     doc.setLineWidth(0.3);
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.4 }));
-    doc.roundedRect(x + 0.5, y + 0.5, w - 1, h - 1, 2, 2, 'S');
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.setGState && doc.setGState(new doc.GState({opacity:0.4}));
+    doc.roundedRect(x+0.5, y+0.5, w-1, h-1, 2, 2, 'S');
+    doc.setGState && doc.setGState(new doc.GState({opacity:1}));
   }
 }
 
 // ============================================
-// DRAW BACK CARD on jsPDF
+// DRAW BACK CARD
 // ============================================
 function drawBackCard(doc, track, x, y, w, h, settings) {
   const scheme = COLOR_SCHEMES[settings.colorScheme] || COLOR_SCHEMES.classic;
   const decadeColor = getDecadeColorForYear(track.year);
   const yearDisplay = track.year ? String(track.year) : '????';
+  const fs = settings.fontsize === 'large' ? 1.3 : 1.0;
 
   // Background image
-  const backBgImg = generateCardBg(w, h, [scheme.backBg, scheme.backBg], 'back', decadeColor);
-  doc.addImage(backBgImg, 'PNG', x, y, w, h);
+  const bgImg = generateBackBg(w, h, scheme.backBg, decadeColor);
+  doc.addImage(bgImg, 'PNG', x, y, w, h);
 
   // Decade color bar (top)
   if (settings.decadeBar) {
     const dRgb = hexToRgb(decadeColor);
     doc.setFillColor(dRgb[0], dRgb[1], dRgb[2]);
-    doc.rect(x, y, w, h * 0.07, 'F');
+    doc.rect(x, y, w, h*0.07, 'F');
   }
 
-  const fs = settings.fontsize === 'large' ? 1.3 : 1.0;
-
   // Artist
-  const artistRgb = hexToRgb(scheme.textColor);
-  doc.setTextColor(artistRgb[0], artistRgb[1], artistRgb[2]);
-  doc.setFontSize(Math.max(6, Math.min(9, w / 8)) * fs);
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(Math.max(6, Math.min(9, w/8)) * fs);
   doc.setFont(undefined, 'normal');
-  const artistLines = splitTextToFit(doc, track.artist, w - 4);
-  let textY = y + h * 0.17;
-  artistLines.slice(0, 2).forEach(line => {
-    doc.text(line, x + w / 2, textY, { align: 'center' });
+  const artistLines = splitTextToFit(doc, track.artist, w-4);
+  let textY = y + h*0.17;
+  artistLines.slice(0,2).forEach(line => {
+    doc.text(line, x+w/2, textY, {align:'center'});
     textY += doc.getFontSize() * 0.45;
   });
 
   // Song title
   const titleRgb = hexToRgb(scheme.subtextColor);
   doc.setTextColor(titleRgb[0], titleRgb[1], titleRgb[2]);
-  doc.setFontSize(Math.max(5, Math.min(7.5, w / 10)) * fs);
-  doc.setFont(undefined, 'normal');
-  const titleLines = splitTextToFit(doc, track.name, w - 4);
-  titleLines.slice(0, 2).forEach(line => {
-    doc.text(line, x + w / 2, textY + 1, { align: 'center' });
+  doc.setFontSize(Math.max(5, Math.min(7.5, w/10)) * fs);
+  const titleLines = splitTextToFit(doc, track.name, w-4);
+  titleLines.slice(0,2).forEach(line => {
+    doc.text(line, x+w/2, textY+1, {align:'center'});
     textY += doc.getFontSize() * 0.42;
   });
 
-  // Album (optional)
+  // Album
   if (settings.album && track.album) {
-    const albRgb = hexToRgb(scheme.subtextColor);
-    doc.setTextColor(albRgb[0], albRgb[1], albRgb[2]);
-    doc.setFontSize(Math.max(4, Math.min(6, w / 13)) * fs);
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.7 }));
-    const albLines = splitTextToFit(doc, track.album, w - 4);
-    doc.text(albLines[0] || '', x + w / 2, textY + 2, { align: 'center' });
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.setFontSize(Math.max(4, Math.min(6, w/13)) * fs);
+    doc.setGState && doc.setGState(new doc.GState({opacity:0.7}));
+    const albLines = splitTextToFit(doc, track.album, w-4);
+    doc.text(albLines[0]||'', x+w/2, textY+2, {align:'center'});
+    doc.setGState && doc.setGState(new doc.GState({opacity:1}));
     textY += 4;
   }
 
-  // YEAR (the hero element)
-  const yearFontSize = settings.fontsize === 'large' ? 28 : 22;
-  const whiteRgb = hexToRgb(scheme.textColor);
-  doc.setTextColor(whiteRgb[0], whiteRgb[1], whiteRgb[2]);
-  doc.setFontSize(yearFontSize);
+  // YEAR
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(settings.fontsize === 'large' ? 28 : 22);
   doc.setFont(undefined, 'normal');
-  const yearY = y + h * 0.80;
-  doc.text(yearDisplay, x + w / 2, yearY, { align: 'center' });
+  doc.text(yearDisplay, x+w/2, y+h*0.80, {align:'center'});
 
-  // Logo (bottom)
-  const logoRgb = hexToRgb(scheme.logoColor.replace(/rgba\([^,]+,[^,]+,[^,]+,([^)]+)\)/, '#888888'));
-  doc.setTextColor(150, 150, 150);
+  // Logo
+  doc.setTextColor(150,150,150);
   doc.setFontSize(4.5 * fs);
-  doc.setFont(undefined, 'normal');
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.5 }));
-  doc.text('TimeTune', x + w / 2, y + h * 0.93, { align: 'center' });
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+  doc.setGState && doc.setGState(new doc.GState({opacity:0.5}));
+  doc.text('TimeTune', x+w/2, y+h*0.93, {align:'center'});
+  doc.setGState && doc.setGState(new doc.GState({opacity:1}));
 
   // Border
   if (settings.border) {
-    doc.setDrawColor(245, 166, 35);
+    doc.setDrawColor(245,166,35);
     doc.setLineWidth(0.3);
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 0.3 }));
-    doc.roundedRect(x + 0.5, y + 0.5, w - 1, h - 1, 2, 2, 'S');
-    doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+    doc.setGState && doc.setGState(new doc.GState({opacity:0.3}));
+    doc.roundedRect(x+0.5, y+0.5, w-1, h-1, 2, 2, 'S');
+    doc.setGState && doc.setGState(new doc.GState({opacity:1}));
   }
 
-  // Reset font
   doc.setFont(undefined, 'normal');
 }
 
@@ -313,68 +258,48 @@ function splitTextToFit(doc, text, maxWidth) {
   const words = text.split(' ');
   const lines = [];
   let line = '';
-
   for (const word of words) {
     const test = line ? line + ' ' + word : word;
     if (doc.getTextWidth(test) > maxWidth && line) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = test;
-    }
+      lines.push(line); line = word;
+    } else line = test;
   }
   if (line) lines.push(line);
   return lines;
 }
 
+function hexToRgb(hex) {
+  hex = (hex||'#888888').replace('#','');
+  if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const n = parseInt(hex,16);
+  return [(n>>16)&255, (n>>8)&255, n&255];
+}
 
+function hexToRgbObj(hex) {
+  const [r,g,b] = hexToRgb(hex);
+  return {r,g,b};
+}
 
-// ============================================
-// CANVAS BACKGROUND GENERATOR
-// ============================================
-
-function generateCardBg(w, h, gradColors, side, accentColor) {
-  const scale = 3;
-  const pw = Math.round(w * scale);
-  const ph = Math.round(h * scale);
-  const canvas = document.createElement('canvas');
-  canvas.width = pw;
-  canvas.height = ph;
-  const ctx = canvas.getContext('2d');
-
-  // Main gradient (top-left to bottom-right)
-  const grad = ctx.createLinearGradient(0, 0, pw, ph);
-  grad.addColorStop(0,   gradColors[0] || '#0f0c29');
-  grad.addColorStop(0.5, gradColors[1] || '#302b63');
-  grad.addColorStop(1,   gradColors[2] || gradColors[0] || '#24243e');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, pw, ph);
-
-  if (side === 'front') {
-    // Subtle top-center light bloom
-    const bloom = ctx.createRadialGradient(pw * 0.5, 0, 0, pw * 0.5, 0, pw * 0.9);
-    bloom.addColorStop(0, 'rgba(120,100,255,0.25)');
-    bloom.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = bloom;
-    ctx.fillRect(0, 0, pw, ph);
-
-    // Bottom corner warm glow
-    const corner = ctx.createRadialGradient(pw, ph, 0, pw, ph, pw * 0.8);
-    corner.addColorStop(0, 'rgba(233,69,96,0.15)');
-    corner.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = corner;
-    ctx.fillRect(0, 0, pw, ph);
+function drawGradientRect(doc, x, y, w, h, colors) {
+  const steps = 20, stepH = h/steps;
+  for (let i=0; i<steps; i++) {
+    const t = i/(steps-1);
+    const c = lerpColors(colors, t);
+    doc.setFillColor(c[0],c[1],c[2]);
+    doc.rect(x, y+i*stepH, w, stepH+0.5, 'F');
   }
+}
 
-  if (side === 'back' && accentColor) {
-    // Decade color subtle center glow
-    const rgb = hexToRgb(accentColor);
-    const glow = ctx.createRadialGradient(pw * 0.5, ph * 0.5, 0, pw * 0.5, ph * 0.5, pw * 0.7);
-    glow.addColorStop(0, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.18)`);
-    glow.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, pw, ph);
-  }
-
-  return canvas.toDataURL('image/png');
+function lerpColors(hexColors, t) {
+  let i, localT;
+  if (hexColors.length===2) { i=0; localT=t; }
+  else if (t<0.5) { i=0; localT=t*2; }
+  else { i=1; localT=(t-0.5)*2; }
+  const c1=hexToRgb(hexColors[i]);
+  const c2=hexToRgb(hexColors[Math.min(i+1,hexColors.length-1)]);
+  return [
+    Math.round(c1[0]+(c2[0]-c1[0])*localT),
+    Math.round(c1[1]+(c2[1]-c1[1])*localT),
+    Math.round(c1[2]+(c2[2]-c1[2])*localT),
+  ];
 }
