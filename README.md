@@ -1,113 +1,112 @@
-# 🎵 TimeTune — Musikkarten Generator
+# 🎵 TimeTune — Music Card Generator
 
-Generiere druckfertige Musikkarten aus deinen Spotify-Playlists für das chronologische Musikraten-Spiel.
+Generate print-ready music cards from your Spotify playlists for the chronological music guessing game.
 
-👉 **[timetu.ne](https://c129h223n3o54.github.io/TimeTune/)** ← App direkt öffnen
-
----
-
-## 🎮 Wie funktioniert's?
-
-### 1. Playlist exportieren
-Gehe zu **[exportify.net](https://exportify.net)** → mit Spotify einloggen → bei deiner Playlist auf **"Export"** klicken → CSV wird heruntergeladen.
-
-### 2. CSV hochladen
-Öffne TimeTune, ziehe die CSV-Datei in den Upload-Bereich — fertig!
-
-### 3. Karten anpassen & PDF generieren
-Karten vorschauen, filtern, Design wählen, PDF erstellen — ausdrucken, ausschneiden, spielen!
+👉 **[c129h223n3o54.github.io/TimeTune](https://c129h223n3o54.github.io/TimeTune/)** ← Open App
 
 ---
 
-## 🃏 Karten-Format
+## 🎮 How It Works
 
-- **Größe:** 63 × 89 mm (Standard Pokerkarten-Format)
-- **Vorderseite:** QR-Code (öffnet Song direkt in der Hitster-App) + TimeTune Branding
-- **Rückseite:** Artist, Songtitel, Album und das **JAHR** — die Kerninformation
-- **6 Karten pro A4-Seite** (2 Spalten × 3 Reihen)
-- **Duplex-Druck** mit automatischer Spiegel-Logik für perfekte Ausrichtung
+### 1. Export your playlist
+Go to **[exportify.net](https://exportify.net)** → log in with Spotify → click **"Export"** next to your playlist → CSV downloads automatically.
+
+### 2. Upload the CSV
+Open TimeTune, drag the CSV file into the upload area — done!
+
+### 3. Customize & generate PDF
+Preview cards, filter by year, choose a design, generate PDF — print, cut, play!
 
 ---
 
-## 🎯 Spielregeln
+## 🃏 Card Format
 
-1. Alle Karten mischen und verdeckt stapeln
-2. Erste Karte aufdecken — sie startet die Zeitlinie
-3. Jede Runde: Karte aufdecken, Jahr schätzen, an die richtige Stelle legen
-4. Rückseite prüfen — richtig? Behalten. Falsch? Zurück in den Stapel.
-5. Wer zuerst 10 Karten gesammelt hat, gewinnt!
+- **Size:** 63 × 89 mm (standard poker card format)
+- **Front:** QR code (opens song directly on Spotify) + TimeTune branding
+- **Back:** Artist, song title, album and the **YEAR** — the key information
+- **6 cards per A4 page** (2 columns × 3 rows)
+- **Duplex print** support with automatic mirroring for perfect alignment
 
-📱 QR-Code scannen → Song spielt direkt in der **Hitster-App** ab
+---
+
+## 🎯 Game Rules
+
+1. Shuffle all cards and place them face-down
+2. Flip the first card — it starts your timeline
+3. Each turn: flip a card, guess the year, place it in your timeline
+4. Check the year on the back — correct? Keep it. Wrong? Back in the pile.
+5. First to collect 10 (or your chosen number) wins!
+
+📱 Scan the QR code → song plays directly on Spotify
 
 ---
 
 ## ✨ Features
 
-- **Kein Login, kein Server** — alles läuft im Browser
-- **CSV-Import** via Exportify — einfach & zuverlässig
-- **Karten-Vorschau** — klicken zum Umdrehen (Flip-Animation)
-- **Filter & Suche** — nach Jahr, Artist, Titel
-- **Zufalls-Auswahl** — X zufällige Karten aus der Playlist
-- **4 Farbschemas** — Classic, Minimal, Vintage, Neon
-- **Jahrzehnt-Farbbalken** — sofortige visuelle Dekaden-Erkennung
-- **Hitster-kompatible QR-Codes** — direkter App-Start beim Scannen
-- **Duplex / Einseitig / Nur Vorder- / Nur Rückseite** Druckmodi
-- **Schriftgröße** Normal & Groß (seniorenfreundlich 👴)
+- **No login, no server** — runs entirely in the browser
+- **CSV import** via Exportify — simple & reliable
+- **Card preview** — click to flip (flip animation)
+- **Filter & search** — by year, artist, title
+- **Random selection** — pick X random cards from the playlist
+- **4 color themes** — Classic, Minimal, Vintage, Neon
+- **Decade color bars** — instant visual decade identification
+- **Duplex / Single-sided / Front-only / Back-only** print modes
+- **Font size** Normal & Large (senior-friendly 👴)
 
 ---
 
-## 🖨️ Drucktipps
+## 🖨️ Print Tips
 
-- **Papier:** 200 g/m² Karton für beste Ergebnisse
-- **Skalierung:** 100% (kein "An Seite anpassen")
-- **Duplex:** "Auf der Schmalseite wenden" einstellen
-- Entlang der gestrichelten Linien ausschneiden
-- Optional laminieren für längere Haltbarkeit
-
----
-
-## 🚀 Eigene Instanz hosten (GitHub Pages)
-
-1. Dieses Repo **forken** (oben rechts "Fork")
-2. Im geforkten Repo: **Settings → Pages → Branch: main / (root) → Save**
-3. Nach ~1 Minute läuft deine eigene Instanz unter:
-   `https://DEIN-USERNAME.github.io/TimeTune/`
-
-Kein Terminal, kein Build-Schritt, keine Konfiguration nötig. ✅
+- **Paper:** 200 g/m² cardstock for best results
+- **Scale:** 100% (no "fit to page")
+- **Duplex:** set "flip on short edge"
+- Cut along the dashed lines
+- Optionally laminate for durability
 
 ---
 
-## 📁 Dateistruktur
+## 🚀 Host Your Own Instance (GitHub Pages)
+
+1. **Fork** this repo (top right "Fork")
+2. In your fork: **Settings → Pages → Branch: main / (root) → Save**
+3. After ~1 minute your own instance is live at:
+   `https://YOUR-USERNAME.github.io/TimeTune/`
+
+No terminal, no build step, no configuration needed. ✅
+
+---
+
+## 📁 File Structure
 
 ```
 TimeTune/
 ├── index.html          — App UI
 ├── style.css           — Styling
-├── app.js              — CSV-Import, Karten-Logik, UI
-├── card-generator.js   — Karten-Rendering für PDF
-├── pdf-generator.js    — PDF-Erstellung mit jsPDF
+├── app.js              — CSV import, card logic, UI
+├── card-generator.js   — Card rendering for PDF
+├── pdf-generator.js    — PDF creation with jsPDF
 └── libs/
-    ├── qrcode-gen.js   — QR-Code Generator
-    ├── qrcode.min.js   — QR-Code API Shim
-    └── jspdf.umd.min.js — PDF Generator
+    ├── qrcode-gen.js   — QR code generator
+    ├── qrcode.min.js   — QR code API shim
+    └── jspdf.umd.min.js — PDF generator
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Vanilla HTML/CSS/JS** — kein Framework, kein Build-Step
-- **Exportify** — Spotify-Playlist Export als CSV
-- **qrcode-generator** — clientseitige QR-Code Generierung
-- **jsPDF** — clientseitige PDF-Erstellung
-- **GitHub Pages** — kostenloses Hosting
+- **Vanilla HTML/CSS/JS** — no framework, no build step
+- **Exportify** — Spotify playlist export as CSV
+- **qrcode-generator** — client-side QR code generation
+- **jsPDF** — client-side PDF creation
+- **GitHub Pages** — free hosting
 
 ---
 
-## 📄 Lizenz
+## 📄 License
 
-MIT — kostenlos nutzbar, veränderbar und weiterzugeben.
+MIT — free to use, modify and share.
 
 ---
 
-Made with ♪ | Inspiriert vom originalen Hitster-Spiel
+Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspired by the Hitster game
