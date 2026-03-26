@@ -216,13 +216,14 @@ function setupEventListeners() {
     });
   });
 
-  // Global custom text -> apply to all cards that have no individual text
+  // Global custom text -> update all card inputs that have no individual text
   document.getElementById('opt-custom-text')?.addEventListener('input', e => {
     state.settings.customText = e.target.value;
-    // Update all card inputs that are still empty
     document.querySelectorAll('.card-custom-input').forEach(input => {
       const id = input.dataset.trackId;
-      if (!state.customTexts[id]) input.placeholder = e.target.value || 'Custom text...';
+      if (!state.customTexts[id]) {
+        input.value = e.target.value;
+      }
     });
   });
 
