@@ -339,23 +339,25 @@ function createCardPreviewElement(track) {
   wrapper.innerHTML = `
     <input type="checkbox" class="card-checkbox" ${isSelected ? 'checked' : ''} />
     <div class="card-preview">
-      <div class="card-side card-side-front">${buildFrontHTML(track)}</div>
-      <div class="card-side card-side-back hidden">${buildBackHTML(track)}</div>
+      <div class="card-inner">
+        <div class="card-face card-front">${buildFrontHTML(track)}</div>
+        <div class="card-face card-back">${buildBackHTML(track)}</div>
+      </div>
     </div>`;
 
   setTimeout(() => generateQRCodeForCard(wrapper, track), 0);
 
-  // Toggle front/back on click
-  wrapper.querySelector('.card-side-front').addEventListener('click', () => {
-    wrapper.querySelector('.card-side-front').classList.add('hidden');
-    wrapper.querySelector('.card-side-back').classList.remove('hidden');
+  // Flip on card click
+  wrapper.querySelector('.card-preview').addEventListener('click', (e) => {
+    // Don't flip when clicking checkbox or custom text input
+    if (e.target.classList.contains('card-custom-input')) return;
+    if (e.target.classList.contains('card-checkbox')) return;
+    wrapper.classList.toggle('flipped');
   });
-  wrapper.querySelector('.card-side-back').addEventListener('click', (e) => {
-    if (!e.target.classList.contains('card-custom-input')) {
-      wrapper.querySelector('.card-side-back').classList.add('hidden');
-      wrapper.querySelector('.card-side-front').classList.remove('hidden');
-    }
-  });
+
+  // Stop input clicks from bubbling
+  wrapper.querySelector('.card-custom-input')?.addEventListener('click', e => e.stopPropagation());
+  wrapper.querySelector('.card-custom-input')?.addEventListener('mousedown', e => e.stopPropagation());
   const cb = wrapper.querySelector('.card-checkbox');
   cb.addEventListener('change', e => {
     e.stopPropagation();
