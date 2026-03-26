@@ -103,10 +103,22 @@ TimeTune/
 
 ---
 
+---
+
+## Credits
+
+The idea, requirements and direction for this project came from **Jan Erik Mueller**.  
+The entire codebase — every line of HTML, CSS and JavaScript, the Spotify API wrapper, the OAuth PKCE flow, the PWA setup, the sync server — was written by **[Claude](https://claude.ai)**, an AI assistant made by [Anthropic](https://www.anthropic.com).
+
+This project is an example of human–AI collaboration: a person with a vision, and an AI that implements it.
+
+---
+
+
 ## 📄 License
 
 MIT — free to use, modify and share.
 
 ---
 
-Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspired by the Hitster game
+Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspired by the Hitster game
