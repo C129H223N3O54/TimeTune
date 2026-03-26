@@ -60,6 +60,16 @@
     .step-text strong { color: var(--text); }
     .step-text a { color: var(--accent); }
 
+    .setup-num {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
     .playlist-info-bar {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
@@ -114,7 +124,7 @@
     <!-- STEP 1: Exportify -->
     <div class="exportify-box">
       <div class="setup-header">
-        <span class="setup-icon">🎵</span>
+        <span class="setup-num">1</span>
         <div>
           <h3>Playlist exportieren</h3>
           <p>Kostenlos via Exportify — einmalig, 30 Sekunden</p>
@@ -136,7 +146,7 @@
     <!-- STEP 2: Upload -->
     <div class="exportify-box">
       <div class="setup-header">
-        <span class="setup-icon">📄</span>
+        <span class="setup-num">2</span>
         <div>
           <h3>CSV hochladen</h3>
           <p>Drag & Drop oder klicken</p>
