@@ -662,31 +662,33 @@ a:hover { text-decoration: underline; }
 .card-custom-text-wrap {
   position: relative;
   z-index: 10;
-  width: 90%;
-  margin-top: 4px;
+  width: 92%;
+  margin-top: 6px;
 }
 
 .card-custom-input {
   width: 100%;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 4px;
-  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.1);
+  border: 1px dashed rgba(233,69,96,0.5);
+  border-radius: 5px;
+  color: rgba(255,255,255,0.95);
   font-family: var(--font-body);
-  font-size: 8px;
-  padding: 3px 6px;
+  font-size: 9px;
+  padding: 4px 7px;
   text-align: center;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  cursor: text;
 }
 
 .card-custom-input:focus {
-  border-color: rgba(233,69,96,0.6);
-  background: rgba(255,255,255,0.12);
+  border-color: var(--accent);
+  border-style: solid;
+  background: rgba(255,255,255,0.15);
 }
 
 .card-custom-input::placeholder {
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.3);
   font-style: italic;
 }
 
