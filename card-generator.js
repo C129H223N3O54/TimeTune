@@ -225,16 +225,9 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   const decadeColor = getDecadeColorForYear(track.year);
   const yearDisplay = track.year ? String(track.year) : '????';
 
-
-
-  // Vinyl circle watermark
-  doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.25);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.08 }));
-  const cx = x + w / 2, cy = y + h * 0.54;
-  for (let r = 2.5; r <= 14; r += 2.5) doc.circle(cx, cy, r, 'S');
-  doc.circle(cx, cy, 1.2, 'S');
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
+  // Background image
+  const backBgImg = generateCardBg(w, h, [scheme.backBg, scheme.backBg], 'back', decadeColor);
+  doc.addImage(backBgImg, 'PNG', x, y, w, h);
 
   // Decade color bar (top)
   if (settings.decadeBar) {
