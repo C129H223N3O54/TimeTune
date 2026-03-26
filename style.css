@@ -486,6 +486,7 @@ a:hover { text-decoration: underline; }
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -497,6 +498,7 @@ a:hover { text-decoration: underline; }
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -663,7 +665,8 @@ a:hover { text-decoration: underline; }
   position: relative;
   z-index: 10;
   width: 92%;
-  margin-top: 6px;
+  margin-top: 4px;
+  margin-bottom: 2px;
 }
 
 .card-custom-input {

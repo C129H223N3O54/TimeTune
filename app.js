@@ -376,6 +376,9 @@ function buildBackHTML(track) {
   const bgs = { classic:'#1a1a2e', minimal:'#111', vintage:'#2a1f14', neon:'#000' };
   const bg = bgs[state.settings.colorScheme] || bgs.classic;
   const dc = getDecadeColor(track.year);
+  const customText = state.customTexts[track.id] !== undefined
+    ? state.customTexts[track.id]
+    : (state.settings.customText || '');
   return `<div class="card-back-preview" style="background:${bg};">
     ${state.settings.decadeBar ? `<div class="card-decade-bar" style="background:${dc};"></div>` : ''}
     <div class="card-back-content">
@@ -384,6 +387,10 @@ function buildBackHTML(track) {
       <div class="card-title-preview">${escHtml(track.name)}</div>
       ${state.settings.album ? `<div class="card-title-preview" style="font-size:7px;opacity:.6;">${escHtml(track.album)}</div>` : ''}
       <div class="card-year-preview">${track.year || '????'}</div>
+      <div class="card-custom-text-wrap">
+        <input type="text" class="card-custom-input" data-track-id="${track.id}"
+          value="${escHtml(customText)}" placeholder="✎ add text..." maxlength="30" />
+      </div>
       <div class="card-back-logo">TimeTune</div>
     </div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.15);border-radius:7px;pointer-events:none;"></div>' : ''}
