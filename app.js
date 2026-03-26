@@ -346,8 +346,8 @@ function createCardPreviewElement(track) {
     </div>`;
 
   setTimeout(() => generateQRCodeForCard(wrapper, track), 0);
-  wrapper.querySelector('.card-front').addEventListener('click', () => wrapper.classList.add('flipped'));
-  wrapper.querySelector('.card-back-preview').addEventListener('click', (e) => {
+  wrapper.querySelector('.card-face.card-front').addEventListener('click', () => wrapper.classList.add('flipped'));
+  wrapper.querySelector('.card-face.card-back').addEventListener('click', (e) => {
     if (!e.target.classList.contains('card-custom-input')) wrapper.classList.remove('flipped');
   });
   const cb = wrapper.querySelector('.card-checkbox');
