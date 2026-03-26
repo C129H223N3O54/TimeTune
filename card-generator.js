@@ -188,12 +188,13 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
 
   // Vinyl rings
   doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.25);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.1 }));
+  doc.setLineWidth(0.4);
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.22 }));
   const vcx = x + w / 2, vcy = y + h * 0.52;
-  for (let r = 3; r <= 18; r += 3) doc.circle(vcx, vcy, r, 'S');
+  for (let r = 3; r <= 20; r += 3.5) doc.circle(vcx, vcy, r, 'S');
   doc.setFillColor(255, 255, 255);
-  doc.circle(vcx, vcy, 1.5, 'F');
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.4 }));
+  doc.circle(vcx, vcy, 1.8, 'F');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Decade color bar (top)
