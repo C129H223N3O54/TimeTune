@@ -160,8 +160,8 @@ function hexToRgbObj(hex) {
 async function drawFrontCard(doc, track, x, y, w, h, settings) {
   const scheme = COLOR_SCHEMES[settings.colorScheme] || COLOR_SCHEMES.classic;
 
-  // Background image generated via canvas
-  const frontBgImg = generateFrontBgCanvas(w, h, scheme);
+  // Background image
+  const frontBgImg = generateCardBg(w, h, scheme.frontGradient, 'front');
   doc.addImage(frontBgImg, 'PNG', x, y, w, h);
 
   // Notes pattern: disabled in PDF (font rendering issues)
@@ -225,7 +225,7 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   const decadeColor = getDecadeColorForYear(track.year);
   const yearDisplay = track.year ? String(track.year) : '????';
 
-  // Background drawn via canvas image above
+
 
   // Vinyl circle watermark
   doc.setDrawColor(255, 255, 255);
@@ -335,12 +335,13 @@ function splitTextToFit(doc, text, maxWidth) {
 }
 
 
+
 // ============================================
-// CANVAS BACKGROUND GENERATORS
+// CANVAS BACKGROUND GENERATOR
 // ============================================
 
-function generateFrontBgCanvas(w, h, scheme) {
-  const scale = 4; // high res
+function generateCardBg(w, h, gradColors, side, accentColor) {
+  const scale = 3;
   const pw = Math.round(w * scale);
   const ph = Math.round(h * scale);
   const canvas = document.createElement('canvas');
@@ -348,75 +349,39 @@ function generateFrontBgCanvas(w, h, scheme) {
   canvas.height = ph;
   const ctx = canvas.getContext('2d');
 
-  // Base gradient
-  const colors = scheme.frontGradient;
-  const grad = ctx.createLinearGradient(0, 0, pw * 0.5, ph);
-  grad.addColorStop(0, colors[0]);
-  grad.addColorStop(0.5, colors[1] || colors[0]);
-  grad.addColorStop(1, colors[2] || colors[0]);
+  // Main gradient (top-left to bottom-right)
+  const grad = ctx.createLinearGradient(0, 0, pw, ph);
+  grad.addColorStop(0,   gradColors[0] || '#0f0c29');
+  grad.addColorStop(0.5, gradColors[1] || '#302b63');
+  grad.addColorStop(1,   gradColors[2] || gradColors[0] || '#24243e');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, pw, ph);
 
-  // Radial glow in center
-  const glow = ctx.createRadialGradient(pw * 0.5, ph * 0.38, 0, pw * 0.5, ph * 0.38, pw * 0.7);
-  glow.addColorStop(0, 'rgba(100,80,180,0.35)');
-  glow.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, pw, ph);
+  if (side === 'front') {
+    // Subtle top-center light bloom
+    const bloom = ctx.createRadialGradient(pw * 0.5, 0, 0, pw * 0.5, 0, pw * 0.9);
+    bloom.addColorStop(0, 'rgba(120,100,255,0.25)');
+    bloom.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bloom;
+    ctx.fillRect(0, 0, pw, ph);
 
-  // Vinyl rings
-  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-  ctx.lineWidth = 0.8;
-  const cx = pw * 0.5, cy = ph * 0.42;
-  for (let r = 8; r < Math.max(pw, ph) * 1.3; r += 14) {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.stroke();
+    // Bottom corner warm glow
+    const corner = ctx.createRadialGradient(pw, ph, 0, pw, ph, pw * 0.8);
+    corner.addColorStop(0, 'rgba(233,69,96,0.15)');
+    corner.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = corner;
+    ctx.fillRect(0, 0, pw, ph);
   }
-  // Center hole
-  ctx.fillStyle = 'rgba(255,255,255,0.15)';
-  ctx.beginPath();
-  ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-  ctx.fill();
 
-  return canvas.toDataURL('image/png');
-}
-
-function generateBackBgCanvas(w, h, scheme, decadeColor) {
-  const scale = 4;
-  const pw = Math.round(w * scale);
-  const ph = Math.round(h * scale);
-  const canvas = document.createElement('canvas');
-  canvas.width = pw;
-  canvas.height = ph;
-  const ctx = canvas.getContext('2d');
-
-  // Base dark background
-  const bgRgb = hexToRgb(scheme.backBg);
-  ctx.fillStyle = scheme.backBg;
-  ctx.fillRect(0, 0, pw, ph);
-
-  // Subtle radial gradient from decade color
-  const dRgb = hexToRgb(decadeColor);
-  const glow = ctx.createRadialGradient(pw * 0.5, ph * 0.55, 0, pw * 0.5, ph * 0.55, pw * 0.8);
-  glow.addColorStop(0, `rgba(${dRgb[0]},${dRgb[1]},${dRgb[2]},0.12)`);
-  glow.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, pw, ph);
-
-  // Vinyl rings centered
-  ctx.strokeStyle = 'rgba(255,255,255,0.09)';
-  ctx.lineWidth = 0.8;
-  const cx = pw * 0.5, cy = ph * 0.52;
-  for (let r = 8; r < Math.max(pw, ph) * 1.1; r += 14) {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.stroke();
+  if (side === 'back' && accentColor) {
+    // Decade color subtle center glow
+    const rgb = hexToRgb(accentColor);
+    const glow = ctx.createRadialGradient(pw * 0.5, ph * 0.5, 0, pw * 0.5, ph * 0.5, pw * 0.7);
+    glow.addColorStop(0, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.18)`);
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, pw, ph);
   }
-  ctx.fillStyle = 'rgba(255,255,255,0.12)';
-  ctx.beginPath();
-  ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-  ctx.fill();
 
   return canvas.toDataURL('image/png');
 }
