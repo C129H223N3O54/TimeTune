@@ -45,13 +45,18 @@ Karten vorschauen, nach Jahr filtern, Design wählen, PDF erstellen — drucken,
 
 - **Kein Login, kein Server** — alles läuft im Browser
 - **CSV-Import** via Exportify — einfach & zuverlässig
-- **Karten-Vorschau** — klicken zum Umdrehen (Flip-Animation)
+- **Karten-Vorschau** — klicken zum Umdrehen (3D-Animation)
+- **Individueller Text pro Karte** — Karte umdrehen und eigenen Text eintragen (z.B. Hinweis oder Kategorie)
+- **Globaler Text** — gleichen Text auf alle Karten setzen (z.B. "Spieleabend 2025")
 - **Filter & Suche** — nach Jahr, Artist, Titel
 - **Zufalls-Auswahl** — X zufällige Karten aus der Playlist
 - **4 Farbschemas** — Classic, Minimal, Vintage, Neon
 - **Jahrzehnt-Farbbalken** — sofortige visuelle Dekaden-Erkennung
+- **QR-Code Größe** — Klein / Normal / Groß
+- **Schriftgröße** — Klein / Normal / Groß
+- **Live-Vorschau** — alle Einstellungen aktualisieren die Kartenvorschau sofort
 - **Duplex / Einseitig / Nur Vorder- / Nur Rückseite** Druckmodi
-- **Schriftgröße** Normal & Groß (seniorenfreundlich 👴)
+- **EN / DE** Sprachumschalter
 
 ---
 
@@ -80,7 +85,7 @@ Kein Terminal, kein Build-Schritt, keine Konfiguration nötig. ✅
 
 ```
 TimeTune/
-├── index.html          — App UI
+├── index.html          — App UI + i18n (EN/DE)
 ├── style.css           — Styling
 ├── app.js              — CSV-Import, Karten-Logik, UI
 ├── card-generator.js   — Karten-Rendering für PDF
@@ -103,21 +108,10 @@ TimeTune/
 
 ---
 
----
-
-## Credits
-
-Die Idee, Anforderungen und Richtung für dieses Projekt kamen von **Jan Erik Mueller**.  
-Der gesamte Code wurde von **[Claude](https://claude.ai)** geschrieben, einem KI-Assistenten von [Anthropic](https://www.anthropic.com).
-
-Dieses Projekt ist ein Beispiel für Mensch–KI-Zusammenarbeit: ein Mensch mit einer Vision, und eine KI die sie umsetzt.
-
----
-
 ## 📄 Lizenz
 
 MIT — kostenlos nutzbar, veränderbar und weiterzugeben.
 
 ---
 
-Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
+Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel

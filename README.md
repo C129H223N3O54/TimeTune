@@ -25,7 +25,7 @@ Preview cards, filter by year, choose a design, generate PDF — print, cut, pla
 - **Front:** QR code (opens song directly on Spotify) + TimeTune branding
 - **Back:** Artist, song title, album and the **YEAR** — the key information
 - **6 cards per A4 page** (2 columns × 3 rows)
-- **Duplex print** support with automatic mirroring for perfect alignment
+- **Duplex print** with automatic mirroring for perfect alignment
 
 ---
 
@@ -45,13 +45,18 @@ Preview cards, filter by year, choose a design, generate PDF — print, cut, pla
 
 - **No login, no server** — runs entirely in the browser
 - **CSV import** via Exportify — simple & reliable
-- **Card preview** — click to flip (flip animation)
+- **Card preview** — click to flip (3D animation)
+- **Individual card text** — flip a card and add custom text per card (e.g. a hint or category)
+- **Global custom text** — add the same text to all cards at once (e.g. "Game Night 2025")
 - **Filter & search** — by year, artist, title
 - **Random selection** — pick X random cards from the playlist
 - **4 color themes** — Classic, Minimal, Vintage, Neon
 - **Decade color bars** — instant visual decade identification
+- **QR code size** — Small / Normal / Large
+- **Font size** — Small / Normal / Large
+- **Live preview** — all settings update the card preview instantly
 - **Duplex / Single-sided / Front-only / Back-only** print modes
-- **Font size** Normal & Large (senior-friendly 👴)
+- **EN / DE** language toggle
 
 ---
 
@@ -80,7 +85,7 @@ No terminal, no build step, no configuration needed. ✅
 
 ```
 TimeTune/
-├── index.html          — App UI
+├── index.html          — App UI + i18n (EN/DE)
 ├── style.css           — Styling
 ├── app.js              — CSV import, card logic, UI
 ├── card-generator.js   — Card rendering for PDF
@@ -103,22 +108,10 @@ TimeTune/
 
 ---
 
----
-
-## Credits
-
-The idea, requirements and direction for this project came from **Jan Erik Mueller**.  
-The entire codebase was written by **[Claude](https://claude.ai)**, an AI assistant made by [Anthropic](https://www.anthropic.com).
-
-This project is an example of human–AI collaboration: a person with a vision, and an AI that implements it.
-
----
-
-
 ## 📄 License
 
 MIT — free to use, modify and share.
 
 ---
 
-Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspired by the Hitster game
+Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspired by the Hitster game
