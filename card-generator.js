@@ -165,17 +165,17 @@ async function drawFrontCard(doc, track, x, y, w, h, settings) {
 
   // Vinyl ring pattern background
   doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.12);
-  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.07 }));
+  doc.setLineWidth(0.3);
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.18 }));
   const vcx = x + w / 2;
   const vcy = y + h * 0.42;
-  const maxR = Math.max(w, h) * 1.1;
-  for (let r = 3; r < maxR; r += 3.5) {
+  const maxR = Math.max(w, h) * 1.2;
+  for (let r = 4; r < maxR; r += 5) {
     doc.circle(vcx, vcy, r, 'S');
   }
-  // Center dot
   doc.setFillColor(255, 255, 255);
-  doc.circle(vcx, vcy, 1.5, 'F');
+  doc.setGState && doc.setGState(new doc.GState({ opacity: 0.3 }));
+  doc.circle(vcx, vcy, 2, 'F');
   doc.setGState && doc.setGState(new doc.GState({ opacity: 1 }));
 
   // Notes pattern: disabled in PDF (font rendering issues)
