@@ -103,10 +103,21 @@ TimeTune/
 
 ---
 
+---
+
+## Credits
+
+Die Idee, Anforderungen und Richtung für dieses Projekt kamen von **Jan Erik Mueller**.  
+Der gesamte Code wurde von **[Claude](https://claude.ai)** geschrieben, einem KI-Assistenten von [Anthropic](https://www.anthropic.com).
+
+Dieses Projekt ist ein Beispiel für Mensch–KI-Zusammenarbeit: ein Mensch mit einer Vision, und eine KI die sie umsetzt.
+
+---
+
 ## 📄 Lizenz
 
 MIT — kostenlos nutzbar, veränderbar und weiterzugeben.
 
 ---
 
-Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
+Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
