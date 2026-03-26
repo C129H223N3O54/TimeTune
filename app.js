@@ -21,7 +21,9 @@ const state = {
     cutlines: true,
     instructions: false,
     blankCards: false,
-  }
+    customText: '',
+  },
+  customTexts: {}, // per-track custom text
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -214,6 +216,30 @@ function setupEventListeners() {
     });
   });
 
+  // Global custom text -> apply to all cards that have no individual text
+  document.getElementById('opt-custom-text')?.addEventListener('input', e => {
+    state.settings.customText = e.target.value;
+    // Update all card inputs that are still empty
+    document.querySelectorAll('.card-custom-input').forEach(input => {
+      const id = input.dataset.trackId;
+      if (!state.customTexts[id]) input.placeholder = e.target.value || 'Custom text...';
+    });
+  });
+
+  // Per-card custom text (event delegation on grid)
+  document.getElementById('cards-grid')?.addEventListener('input', e => {
+    if (e.target.classList.contains('card-custom-input')) {
+      e.stopPropagation();
+      const id = e.target.dataset.trackId;
+      state.customTexts[id] = e.target.value;
+    }
+  });
+  document.getElementById('cards-grid')?.addEventListener('click', e => {
+    if (e.target.classList.contains('card-custom-input')) {
+      e.stopPropagation();
+    }
+  });
+
   // PDF
   document.getElementById('generate-pdf-btn')?.addEventListener('click', generatePDF);
 }
@@ -400,7 +426,8 @@ async function generatePDF() {
   document.getElementById('generate-pdf-btn').disabled = true;
 
   try {
-    await generateCardsPDF(selected, state.settings, (pct, text) => {
+    const settingsWithTexts = { ...state.settings, customTexts: state.customTexts };
+    await generateCardsPDF(selected, settingsWithTexts, (pct, text) => {
       document.getElementById('progress-fill').style.width = pct + '%';
       document.getElementById('progress-percent').textContent = Math.round(pct) + '%';
       document.getElementById('progress-text').textContent = text || 'PDF wird erstellt...';

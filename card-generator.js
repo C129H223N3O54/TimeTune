@@ -241,11 +241,24 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setFont(undefined, 'normal');
   doc.text(yearDisplay, x+w/2, y+h*0.80, {align:'center'});
 
-  // Logo
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(4.5 * fs);
-  doc.setGState && doc.setGState(new doc.GState({opacity:0.5}));
-  doc.text('TimeTune', x+w/2, y+h*0.93, {align:'center'});
+  // Custom text (per-card takes priority over global)
+  const trackCustomText = (settings.customTexts && settings.customTexts[track.id])
+    ? settings.customTexts[track.id]
+    : (settings.customText || '');
+
+  doc.setGState && doc.setGState(new doc.GState({opacity:0.6}));
+  if (trackCustomText) {
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(5.5 * fs);
+    doc.text(trackCustomText, x+w/2, y+h*0.91, {align:'center'});
+    doc.setTextColor(100,100,100);
+    doc.setFontSize(3.5 * fs);
+    doc.text('TimeTune', x+w/2, y+h*0.95, {align:'center'});
+  } else {
+    doc.setTextColor(150,150,150);
+    doc.setFontSize(4.5 * fs);
+    doc.text('TimeTune', x+w/2, y+h*0.93, {align:'center'});
+  }
   doc.setGState && doc.setGState(new doc.GState({opacity:1}));
 
   // Border

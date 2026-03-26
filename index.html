@@ -289,6 +289,12 @@
         </div>
 
         <div class="setting-group">
+          <label class="setting-label" data-i18n="customText">Custom Text (back)</label>
+          <input type="text" id="opt-custom-text" class="input-field" placeholder="e.g. Game Night 2025" maxlength="40" style="margin-top:4px;" data-i18n-placeholder="customTextPlaceholder" />
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;" data-i18n="customTextHint">Shown at the bottom of every card back</div>
+        </div>
+
+        <div class="setting-group">
           <label class="setting-label" data-i18n="pageFormat">Page Format</label>
           <div class="toggle-group">
             <button class="toggle-btn active" data-setting="pageformat" data-value="a4">A4</button>
@@ -375,6 +381,7 @@ const TRANSLATIONS = {
     optBorder: 'Border', optDecade: 'Decade color bar', optAlbum: 'Album name',
     optCutlines: 'Cut lines', optInstructions: 'Game instructions (1st page)', optBlank: 'Blank cards at end',
     statCards: 'Cards', statPages: 'Pages', statPrint: 'Print pages',
+    customText: 'Custom Text (back)', customTextPlaceholder: 'e.g. Game Night 2025 (all cards)', customTextHint: 'Shown at the bottom of every card back',
     createPdf: 'Create PDF', creating: 'Creating PDF...',
     randomTitle: 'Random Selection', randomDesc: 'How many random cards to select?',
     cancel: 'Cancel', select: 'Select',
@@ -399,6 +406,7 @@ const TRANSLATIONS = {
     optBorder: 'Rahmen', optDecade: 'Jahrzehnt-Farbbalken', optAlbum: 'Album-Name',
     optCutlines: 'Schnittlinien', optInstructions: 'Spielanleitung (1. Seite)', optBlank: 'Leere Karten am Ende',
     statCards: 'Karten', statPages: 'Seiten', statPrint: 'Seiten Druck',
+    customText: 'Eigener Text (Rückseite)', customTextPlaceholder: 'z.B. Spieleabend 2025 (alle Karten)', customTextHint: 'Erscheint unten auf jeder Kartenrückseite',
     createPdf: 'PDF erstellen', creating: 'PDF wird erstellt...',
     randomTitle: 'Zufällige Auswahl', randomDesc: 'Wie viele zufällige Karten auswählen?',
     cancel: 'Abbrechen', select: 'Auswählen',
