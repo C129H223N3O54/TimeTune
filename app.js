@@ -339,16 +339,22 @@ function createCardPreviewElement(track) {
   wrapper.innerHTML = `
     <input type="checkbox" class="card-checkbox" ${isSelected ? 'checked' : ''} />
     <div class="card-preview">
-      <div class="card-inner">
-        <div class="card-face card-front">${buildFrontHTML(track)}</div>
-        <div class="card-face card-back">${buildBackHTML(track)}</div>
-      </div>
+      <div class="card-side card-side-front">${buildFrontHTML(track)}</div>
+      <div class="card-side card-side-back hidden">${buildBackHTML(track)}</div>
     </div>`;
 
   setTimeout(() => generateQRCodeForCard(wrapper, track), 0);
-  wrapper.querySelector('.card-face.card-front').addEventListener('click', () => wrapper.classList.add('flipped'));
-  wrapper.querySelector('.card-face.card-back').addEventListener('click', (e) => {
-    if (!e.target.classList.contains('card-custom-input')) wrapper.classList.remove('flipped');
+
+  // Toggle front/back on click
+  wrapper.querySelector('.card-side-front').addEventListener('click', () => {
+    wrapper.querySelector('.card-side-front').classList.add('hidden');
+    wrapper.querySelector('.card-side-back').classList.remove('hidden');
+  });
+  wrapper.querySelector('.card-side-back').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('card-custom-input')) {
+      wrapper.querySelector('.card-side-back').classList.add('hidden');
+      wrapper.querySelector('.card-side-front').classList.remove('hidden');
+    }
   });
   const cb = wrapper.querySelector('.card-checkbox');
   cb.addEventListener('change', e => {
