@@ -249,11 +249,11 @@ function drawBackCard(doc, track, x, y, w, h, settings) {
   doc.setGState && doc.setGState(new doc.GState({opacity:0.6}));
   if (trackCustomText) {
     doc.setTextColor(255,255,255);
-    doc.setFontSize(5.5 * fs);
+    doc.setFontSize(8 * fs);
     doc.text(trackCustomText, x+w/2, y+h*0.91, {align:'center'});
     doc.setTextColor(100,100,100);
-    doc.setFontSize(3.5 * fs);
-    doc.text('TimeTune', x+w/2, y+h*0.95, {align:'center'});
+    doc.setFontSize(4 * fs);
+    doc.text('TimeTune', x+w/2, y+h*0.96, {align:'center'});
   } else {
     doc.setTextColor(150,150,150);
     doc.setFontSize(4.5 * fs);
