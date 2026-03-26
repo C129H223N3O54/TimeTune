@@ -195,6 +195,7 @@ function setupEventListeners() {
       document.querySelectorAll(`.toggle-btn[data-setting="${btn.dataset.setting}"]`).forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.settings[btn.dataset.setting] = btn.dataset.value;
+      if (['fontsize', 'qrsize'].includes(btn.dataset.setting)) renderCards();
       updateStats();
     });
   });
@@ -372,9 +373,13 @@ function createCardPreviewElement(track) {
 function buildFrontHTML(track) {
   const bgs = { classic:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)', minimal:'linear-gradient(135deg,#111,#333)', vintage:'linear-gradient(135deg,#3d2b1f,#6b4c35)', neon:'linear-gradient(135deg,#000,#0d0d0d)' };
   const bg = bgs[state.settings.colorScheme] || bgs.classic;
+  const qrLarge = state.settings.qrsize === 'large';
+  const qrSize = qrLarge ? '75%' : '60%';
+  const qrMarginTop = qrLarge ? '6px' : '12px';
   return `<div class="card-front-preview" style="background:${bg};">
-
-    <div class="card-qr-container" id="qr-${track.id}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:9px;">QR</div></div>
+    <div class="card-qr-container" id="qr-${track.id}" style="width:${qrSize};aspect-ratio:1;margin-top:${qrMarginTop};">
+      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:9px;">QR</div>
+    </div>
     <div class="card-front-logo">TimeTune</div>
     ${state.settings.border ? '<div style="position:absolute;inset:2px;border:1px solid rgba(255,200,0,0.25);border-radius:7px;pointer-events:none;"></div>' : ''}
   </div>`;
@@ -391,10 +396,10 @@ function buildBackHTML(track) {
     ${state.settings.decadeBar ? `<div class="card-decade-bar" style="background:${dc};"></div>` : ''}
     <div class="card-back-content">
       <div class="card-vinyl-bg" style="width:50px;height:50px;opacity:0.06;"></div>
-      <div class="card-artist-preview">${escHtml(track.artist)}</div>
-      <div class="card-title-preview">${escHtml(track.name)}</div>
-      ${state.settings.album ? `<div class="card-title-preview" style="font-size:7px;opacity:.6;">${escHtml(track.album)}</div>` : ''}
-      <div class="card-year-preview">${track.year || '????'}</div>
+      <div class="card-artist-preview" style="font-size:${state.settings.fontsize === 'large' ? '11px' : state.settings.fontsize === 'small' ? '7px' : '9px'};">${escHtml(track.artist)}</div>
+      <div class="card-title-preview" style="font-size:${state.settings.fontsize === 'large' ? '9px' : state.settings.fontsize === 'small' ? '6px' : '7.5px'};">${escHtml(track.name)}</div>
+      ${state.settings.album ? `<div class="card-title-preview" style="font-size:${state.settings.fontsize === 'large' ? '8px' : state.settings.fontsize === 'small' ? '5px' : '6.5px'};opacity:.6;">${escHtml(track.album)}</div>` : ''}
+      <div class="card-year-preview" style="font-size:${state.settings.fontsize === 'large' ? '28px' : state.settings.fontsize === 'small' ? '18px' : '22px'};">${track.year || '????'}</div>
       <div class="card-custom-text-wrap">
         <input type="text" class="card-custom-input" data-track-id="${track.id}"
           value="${escHtml(customText)}" placeholder="✎ add text..." maxlength="30" />
