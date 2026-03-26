@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TimeTune — Musikkarten Generator</title>
+  <title>TimeTune — Music Card Generator</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230d0d1a'/><circle cx='16' cy='16' r='14' fill='none' stroke='%23e94560' stroke-width='1.5'/><circle cx='16' cy='16' r='5' fill='%23e94560'/><circle cx='16' cy='16' r='2' fill='%230d0d1a'/></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260325" />
+  <link rel="stylesheet" href="style.css?v=20260326" />
   <style>
-    /* CSV-specific styles */
     .drop-zone {
       border: 2px dashed rgba(233,69,96,0.4);
       border-radius: 16px;
@@ -28,7 +27,6 @@
     .drop-icon { font-size: 48px; margin-bottom: 12px; display: block; }
     .drop-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
     .drop-sub { font-size: 13px; color: var(--text-muted); }
-
     .exportify-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -44,22 +42,23 @@
     }
     .exportify-step {
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      align-items: center;
+      gap: 10px;
       font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
     .step-badge {
-      width: 24px; height: 24px;
+      width: 22px; height: 22px;
       background: var(--accent);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
+      font-size: 11px; font-weight: 700;
       flex-shrink: 0;
+      color: white;
     }
-    .step-text { color: var(--text-muted); padding-top: 3px; }
     .step-text strong { color: var(--text); }
-    .step-text a { color: var(--accent); }
-
+    .step-text a { color: var(--accent); font-weight: 600; }
     .setup-num {
       width: 36px; height: 36px;
       background: linear-gradient(135deg, var(--accent), var(--gold));
@@ -69,7 +68,6 @@
       color: white;
       flex-shrink: 0;
     }
-
     .playlist-info-bar {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
@@ -80,8 +78,34 @@
       margin-bottom: 20px;
       font-weight: 500;
     }
-
     #csv-file-input { display: none; }
+
+    /* LANGUAGE TOGGLE */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .lang-btn {
+      padding: 4px 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -105,113 +129,119 @@
       </svg>
       <span class="logo-text">TimeTune</span>
     </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="lang-de" onclick="setLang('de')">DE</button>
+    </div>
   </div>
 </header>
 
 <main class="main-content">
 
-  <!-- ========== SECTION: LOGIN / UPLOAD ========== -->
+  <!-- SECTION: UPLOAD -->
   <section id="section-login" class="section section-login">
     <h1 class="hero-title">
-      Erstelle<br/>
-      <span class="gradient-text">Musikkarten</span><br/>
-      für dein Spiel
+      <span data-i18n="hero1">Create</span><br/>
+      <span class="gradient-text" data-i18n="hero2">Music Cards</span><br/>
+      <span data-i18n="hero3">for your Game</span>
     </h1>
-    <p class="hero-subtitle">
-      Exportiere deine Spotify-Playlist als CSV und generiere druckfertige Karten für das chronologische Musikraten.
+    <p class="hero-subtitle" data-i18n="heroSub">
+      Export your Spotify playlist as CSV and generate print-ready cards for the chronological music guessing game.
     </p>
 
-    <!-- STEP 1: Exportify -->
     <div class="exportify-box">
       <div class="setup-header">
-        <div style="text-align:center;width:100%;"><h3>Playlist exportieren</h3><p style="font-size:13px;color:var(--text-muted);margin-top:4px;">Kostenlos via Exportify — einmalig, 30 Sekunden</p></div>
+        <div style="text-align:center;width:100%;">
+          <h3 data-i18n="step1Title">Export Playlist</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:4px;" data-i18n="step1Sub">Free via Exportify — one-time, 30 seconds</p>
+        </div>
       </div>
       <div class="exportify-steps">
         <div class="exportify-step">
-          <div class="step-badge">1</div><div class="step-text">Gehe zu <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong> und logge dich mit Spotify ein</div>
+          <div class="step-badge">1</div>
+          <div class="step-text" data-i18n="step1a">Go to <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong> and log in with Spotify</div>
         </div>
         <div class="exportify-step">
-          <div class="step-badge">2</div><div class="step-text">Klicke bei deiner Playlist auf <strong>"Export"</strong> → CSV wird heruntergeladen</div>
+          <div class="step-badge">2</div>
+          <div class="step-text" data-i18n="step1b">Click <strong>"Export"</strong> next to your playlist → CSV downloads</div>
         </div>
         <div class="exportify-step">
-          <div class="step-badge">3</div><div class="step-text">CSV-Datei hier hochladen → fertig! 🎉</div>
+          <div class="step-badge">3</div>
+          <div class="step-text" data-i18n="step1c">Upload the CSV here → done! 🎉</div>
         </div>
       </div>
     </div>
 
-    <!-- STEP 2: Upload -->
     <div class="exportify-box">
       <div class="setup-header">
-        <div style="text-align:center;width:100%;"><h3>CSV hochladen</h3><p style="font-size:13px;color:var(--text-muted);margin-top:4px;">Drag & Drop oder klicken</p></div>
+        <div style="text-align:center;width:100%;">
+          <h3 data-i18n="step2Title">Upload CSV</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:4px;" data-i18n="step2Sub">Drag & Drop or click</p>
+        </div>
       </div>
-
       <div class="drop-zone" id="drop-zone">
         <span class="drop-icon">📄</span>
-        <div class="drop-title">CSV hier ablegen</div>
-        <div class="drop-sub">oder klicken zum Auswählen</div>
+        <div class="drop-title" data-i18n="dropTitle">Drop CSV here</div>
+        <div class="drop-sub" data-i18n="dropSub">or click to select</div>
       </div>
       <input type="file" id="csv-file-input" accept=".csv" />
     </div>
 
     <div class="feature-grid">
-      <div class="feature-item"><span class="feature-icon">🎵</span><span>Spotify Playlists</span></div>
-      <div class="feature-item"><span class="feature-icon">📱</span><span>QR-Codes</span></div>
-      <div class="feature-item"><span class="feature-icon">🖨️</span><span>Druckfertig</span></div>
-      <div class="feature-item"><span class="feature-icon">🔒</span><span>Kein Server</span></div>
+      <div class="feature-item"><span class="feature-icon">🎵</span><span data-i18n="feat1">Spotify Playlists</span></div>
+      <div class="feature-item"><span class="feature-icon">📱</span><span data-i18n="feat2">QR Codes</span></div>
+      <div class="feature-item"><span class="feature-icon">🖨️</span><span data-i18n="feat3">Print-Ready</span></div>
+      <div class="feature-item"><span class="feature-icon">🔒</span><span data-i18n="feat4">No Server</span></div>
     </div>
   </section>
 
-  <!-- ========== SECTION: TRACKS ========== -->
+  <!-- SECTION: TRACKS -->
   <section id="section-tracks" class="section hidden">
 
-    <!-- INFO BAR -->
     <div id="playlist-info-bar" class="playlist-info-bar hidden"></div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <h2 class="section-title"><span id="selected-count">0</span> Karten ausgewählt</h2>
-        <input type="text" id="search-input" class="input-field input-sm" placeholder="🔍 Suchen..." />
+        <h2 class="section-title"><span id="selected-count">0</span> <span data-i18n="cardsSelected">cards selected</span></h2>
+        <input type="text" id="search-input" class="input-field input-sm" placeholder="🔍 Search..." data-i18n-placeholder="searchPlaceholder" />
       </div>
       <div class="toolbar-right">
-        <button id="select-all-btn" class="btn-ghost btn-sm">Alle</button>
-        <button id="deselect-all-btn" class="btn-ghost btn-sm">Keine</button>
-        <button id="random-btn" class="btn-ghost btn-sm">🎲 Zufällig</button>
+        <button id="select-all-btn" class="btn-ghost btn-sm" data-i18n="selectAll">All</button>
+        <button id="deselect-all-btn" class="btn-ghost btn-sm" data-i18n="selectNone">None</button>
+        <button id="random-btn" class="btn-ghost btn-sm" data-i18n="random">🎲 Random</button>
         <div class="select-wrapper select-sm">
           <select id="sort-select" class="select-field">
-            <option value="playlist">Reihenfolge</option>
-            <option value="year-asc">Jahr ↑</option>
-            <option value="year-desc">Jahr ↓</option>
-            <option value="artist">Artist A–Z</option>
-            <option value="title">Titel A–Z</option>
+            <option value="playlist" data-i18n="sortPlaylist">Playlist order</option>
+            <option value="year-asc" data-i18n="sortYearAsc">Year ↑</option>
+            <option value="year-desc" data-i18n="sortYearDesc">Year ↓</option>
+            <option value="artist" data-i18n="sortArtist">Artist A–Z</option>
+            <option value="title" data-i18n="sortTitle">Title A–Z</option>
           </select>
         </div>
-        <button class="btn-ghost btn-sm" onclick="document.getElementById('section-login').classList.remove('hidden');document.getElementById('section-tracks').classList.add('hidden');">
-          ← Neue CSV
+        <button class="btn-ghost btn-sm" data-i18n="newCsv"
+          onclick="document.getElementById('section-login').classList.remove('hidden');document.getElementById('section-tracks').classList.add('hidden');">
+          ← New CSV
         </button>
       </div>
     </div>
 
-    <!-- YEAR FILTER -->
     <div class="year-filter">
-      <label class="filter-label">Jahres-Filter:</label>
-      <input type="number" id="year-from" class="input-field input-xs" placeholder="Von" min="1900" max="2030" />
+      <label class="filter-label" data-i18n="yearFilter">Year filter:</label>
+      <input type="number" id="year-from" class="input-field input-xs" placeholder="From" min="1900" max="2030" data-i18n-placeholder="from" />
       <span>—</span>
-      <input type="number" id="year-to" class="input-field input-xs" placeholder="Bis" min="1900" max="2030" />
-      <button id="apply-year-filter-btn" class="btn-ghost btn-sm">Anwenden</button>
-      <button id="reset-year-filter-btn" class="btn-ghost btn-sm">Reset</button>
+      <input type="number" id="year-to" class="input-field input-xs" placeholder="To" min="1900" max="2030" data-i18n-placeholder="to" />
+      <button id="apply-year-filter-btn" class="btn-ghost btn-sm" data-i18n="apply">Apply</button>
+      <button id="reset-year-filter-btn" class="btn-ghost btn-sm" data-i18n="reset">Reset</button>
     </div>
 
-    <!-- CARDS GRID -->
     <div id="cards-grid" class="cards-grid"></div>
 
-    <!-- SETTINGS -->
     <div class="settings-panel">
-      <h3 class="settings-title">⚙️ Einstellungen</h3>
+      <h3 class="settings-title" data-i18n="settings">⚙️ Settings</h3>
       <div class="settings-grid">
 
         <div class="setting-group">
-          <label class="setting-label">Farbschema</label>
+          <label class="setting-label" data-i18n="colorScheme">Color Scheme</label>
           <div class="radio-group">
             <label class="radio-option active" data-scheme="classic"><input type="radio" name="color-scheme" value="classic" checked /><span class="radio-swatch swatch-classic"></span>Classic</label>
             <label class="radio-option" data-scheme="minimal"><input type="radio" name="color-scheme" value="minimal" /><span class="radio-swatch swatch-minimal"></span>Minimal</label>
@@ -221,46 +251,45 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">Schriftgröße</label>
+          <label class="setting-label" data-i18n="fontSize">Font Size</label>
           <div class="toggle-group">
-            <button class="toggle-btn active" data-setting="fontsize" data-value="normal">Normal</button>
-            <button class="toggle-btn" data-setting="fontsize" data-value="large">Groß 👴</button>
+            <button class="toggle-btn active" data-setting="fontsize" data-value="normal" data-i18n="normal">Normal</button>
+            <button class="toggle-btn" data-setting="fontsize" data-value="large" data-i18n="large">Large 👴</button>
           </div>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">QR-Code Größe</label>
+          <label class="setting-label" data-i18n="qrSize">QR Code Size</label>
           <div class="toggle-group">
-            <button class="toggle-btn active" data-setting="qrsize" data-value="normal">Normal</button>
-            <button class="toggle-btn" data-setting="qrsize" data-value="large">Groß</button>
+            <button class="toggle-btn active" data-setting="qrsize" data-value="normal" data-i18n="normal">Normal</button>
+            <button class="toggle-btn" data-setting="qrsize" data-value="large" data-i18n="large">Large</button>
           </div>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">PDF-Druck</label>
+          <label class="setting-label" data-i18n="printMode">Print Mode</label>
           <div class="toggle-group">
-            <button class="toggle-btn active" data-setting="printmode" data-value="duplex">Duplex</button>
-            <button class="toggle-btn" data-setting="printmode" data-value="single">Einseitig</button>
-            <button class="toggle-btn" data-setting="printmode" data-value="front-only">Nur Vorder</button>
-            <button class="toggle-btn" data-setting="printmode" data-value="back-only">Nur Rückseite</button>
+            <button class="toggle-btn active" data-setting="printmode" data-value="duplex" data-i18n="duplex">Duplex</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="single" data-i18n="single">Single</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="front-only" data-i18n="frontOnly">Front only</button>
+            <button class="toggle-btn" data-setting="printmode" data-value="back-only" data-i18n="backOnly">Back only</button>
           </div>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">Optionen</label>
+          <label class="setting-label" data-i18n="options">Options</label>
           <div class="checkbox-group">
-            <label class="checkbox-option"><input type="checkbox" id="opt-border" checked /><span class="checkmark"></span>Rahmen</label>
-
-            <label class="checkbox-option"><input type="checkbox" id="opt-decade-bar" checked /><span class="checkmark"></span>Jahrzehnt-Farbbalken</label>
-            <label class="checkbox-option"><input type="checkbox" id="opt-album" checked /><span class="checkmark"></span>Album-Name</label>
-            <label class="checkbox-option"><input type="checkbox" id="opt-cutlines" checked /><span class="checkmark"></span>Schnittlinien</label>
-            <label class="checkbox-option"><input type="checkbox" id="opt-instructions" /><span class="checkmark"></span>Spielanleitung (1. Seite)</label>
-            <label class="checkbox-option"><input type="checkbox" id="opt-blank-cards" /><span class="checkmark"></span>Leere Karten am Ende</label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-border" checked /><span class="checkmark"></span><span data-i18n="optBorder">Border</span></label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-decade-bar" checked /><span class="checkmark"></span><span data-i18n="optDecade">Decade color bar</span></label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-album" checked /><span class="checkmark"></span><span data-i18n="optAlbum">Album name</span></label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-cutlines" checked /><span class="checkmark"></span><span data-i18n="optCutlines">Cut lines</span></label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-instructions" /><span class="checkmark"></span><span data-i18n="optInstructions">Game instructions (1st page)</span></label>
+            <label class="checkbox-option"><input type="checkbox" id="opt-blank-cards" /><span class="checkmark"></span><span data-i18n="optBlank">Blank cards at end</span></label>
           </div>
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">Seitenformat</label>
+          <label class="setting-label" data-i18n="pageFormat">Page Format</label>
           <div class="toggle-group">
             <button class="toggle-btn active" data-setting="pageformat" data-value="a4">A4</button>
             <button class="toggle-btn" data-setting="pageformat" data-value="letter">Letter</button>
@@ -270,26 +299,23 @@
       </div>
     </div>
 
-    <!-- STATS -->
     <div class="pdf-stats">
-      <div class="stat-item"><span class="stat-num" id="stat-selected">0</span><span class="stat-desc">Karten</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-selected">0</span><span class="stat-desc" data-i18n="statCards">Cards</span></div>
       <div class="stat-divider"></div>
-      <div class="stat-item"><span class="stat-num" id="stat-pages">0</span><span class="stat-desc">Seiten</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-pages">0</span><span class="stat-desc" data-i18n="statPages">Pages</span></div>
       <div class="stat-divider"></div>
-      <div class="stat-item"><span class="stat-num" id="stat-print-info">—</span><span class="stat-desc">Seiten Druck</span></div>
+      <div class="stat-item"><span class="stat-num" id="stat-print-info">—</span><span class="stat-desc" data-i18n="statPrint">Print pages</span></div>
     </div>
 
-    <!-- PDF BUTTON -->
     <div class="pdf-actions">
       <button id="generate-pdf-btn" class="btn-primary btn-xl">
-        <span class="btn-icon">📄</span> PDF erstellen
+        <span class="btn-icon">📄</span> <span data-i18n="createPdf">Create PDF</span>
       </button>
     </div>
 
-    <!-- PROGRESS -->
     <div id="progress-container" class="progress-container hidden">
       <div class="progress-label">
-        <span id="progress-text">PDF wird erstellt...</span>
+        <span id="progress-text" data-i18n="creating">Creating PDF...</span>
         <span id="progress-percent">0%</span>
       </div>
       <div class="progress-bar">
@@ -304,12 +330,12 @@
 <!-- RANDOM MODAL -->
 <div id="random-modal" class="modal-overlay hidden">
   <div class="modal">
-    <h3>Zufällige Auswahl</h3>
-    <p>Wie viele zufällige Karten auswählen?</p>
+    <h3 data-i18n="randomTitle">Random Selection</h3>
+    <p data-i18n="randomDesc">How many random cards to select?</p>
     <input type="number" id="random-count-input" class="input-field" value="50" min="1" />
     <div class="modal-actions">
-      <button id="random-cancel-btn" class="btn-ghost">Abbrechen</button>
-      <button id="random-confirm-btn" class="btn-primary">Auswählen</button>
+      <button id="random-cancel-btn" class="btn-ghost" data-i18n="cancel">Cancel</button>
+      <button id="random-confirm-btn" class="btn-primary" data-i18n="select">Select</button>
     </div>
   </div>
 </div>
@@ -317,11 +343,103 @@
 <!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
-<script src="libs/qrcode-gen.js?v=20260325"></script>
-<script src="libs/qrcode.min.js?v=20260325"></script>
-<script src="libs/jspdf.umd.min.js?v=20260325"></script>
-<script src="card-generator.js?v=20260325"></script>
-<script src="pdf-generator.js?v=20260325"></script>
-<script src="app.js?v=20260325"></script>
+<script src="libs/qrcode-gen.js?v=20260326"></script>
+<script src="libs/qrcode.min.js?v=20260326"></script>
+<script src="libs/jspdf.umd.min.js?v=20260326"></script>
+<script src="card-generator.js?v=20260326"></script>
+<script src="pdf-generator.js?v=20260326"></script>
+<script src="app.js?v=20260326"></script>
+
+<script>
+// ============================================
+// i18n — Translations
+// ============================================
+const TRANSLATIONS = {
+  en: {
+    hero1: 'Create', hero2: 'Music Cards', hero3: 'for your Game',
+    heroSub: 'Export your Spotify playlist as CSV and generate print-ready cards for the chronological music guessing game.',
+    step1Title: 'Export Playlist', step1Sub: 'Free via Exportify — one-time, 30 seconds',
+    step1a: 'Go to <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong> and log in with Spotify',
+    step1b: 'Click <strong>"Export"</strong> next to your playlist → CSV downloads',
+    step1c: 'Upload the CSV here → done! 🎉',
+    step2Title: 'Upload CSV', step2Sub: 'Drag & Drop or click',
+    dropTitle: 'Drop CSV here', dropSub: 'or click to select',
+    feat1: 'Spotify Playlists', feat2: 'QR Codes', feat3: 'Print-Ready', feat4: 'No Server',
+    cardsSelected: 'cards selected', searchPlaceholder: '🔍 Search...',
+    selectAll: 'All', selectNone: 'None', random: '🎲 Random', newCsv: '← New CSV',
+    yearFilter: 'Year filter:', from: 'From', to: 'To', apply: 'Apply', reset: 'Reset',
+    sortPlaylist: 'Playlist order', sortYearAsc: 'Year ↑', sortYearDesc: 'Year ↓', sortArtist: 'Artist A–Z', sortTitle: 'Title A–Z',
+    settings: '⚙️ Settings', colorScheme: 'Color Scheme', fontSize: 'Font Size',
+    qrSize: 'QR Code Size', printMode: 'Print Mode', options: 'Options', pageFormat: 'Page Format',
+    normal: 'Normal', large: 'Large 👴', duplex: 'Duplex', single: 'Single', frontOnly: 'Front only', backOnly: 'Back only',
+    optBorder: 'Border', optDecade: 'Decade color bar', optAlbum: 'Album name',
+    optCutlines: 'Cut lines', optInstructions: 'Game instructions (1st page)', optBlank: 'Blank cards at end',
+    statCards: 'Cards', statPages: 'Pages', statPrint: 'Print pages',
+    createPdf: 'Create PDF', creating: 'Creating PDF...',
+    randomTitle: 'Random Selection', randomDesc: 'How many random cards to select?',
+    cancel: 'Cancel', select: 'Select',
+  },
+  de: {
+    hero1: 'Erstelle', hero2: 'Musikkarten', hero3: 'für dein Spiel',
+    heroSub: 'Exportiere deine Spotify-Playlist als CSV und generiere druckfertige Karten für das chronologische Musikraten.',
+    step1Title: 'Playlist exportieren', step1Sub: 'Kostenlos via Exportify — einmalig, 30 Sekunden',
+    step1a: 'Gehe zu <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong> und logge dich mit Spotify ein',
+    step1b: 'Klicke bei deiner Playlist auf <strong>"Export"</strong> → CSV wird heruntergeladen',
+    step1c: 'CSV-Datei hier hochladen → fertig! 🎉',
+    step2Title: 'CSV hochladen', step2Sub: 'Drag & Drop oder klicken',
+    dropTitle: 'CSV hier ablegen', dropSub: 'oder klicken zum Auswählen',
+    feat1: 'Spotify Playlists', feat2: 'QR-Codes', feat3: 'Druckfertig', feat4: 'Kein Server',
+    cardsSelected: 'Karten ausgewählt', searchPlaceholder: '🔍 Suchen...',
+    selectAll: 'Alle', selectNone: 'Keine', random: '🎲 Zufällig', newCsv: '← Neue CSV',
+    yearFilter: 'Jahres-Filter:', from: 'Von', to: 'Bis', apply: 'Anwenden', reset: 'Reset',
+    sortPlaylist: 'Reihenfolge', sortYearAsc: 'Jahr ↑', sortYearDesc: 'Jahr ↓', sortArtist: 'Artist A–Z', sortTitle: 'Titel A–Z',
+    settings: '⚙️ Einstellungen', colorScheme: 'Farbschema', fontSize: 'Schriftgröße',
+    qrSize: 'QR-Code Größe', printMode: 'PDF-Druck', options: 'Optionen', pageFormat: 'Seitenformat',
+    normal: 'Normal', large: 'Groß 👴', duplex: 'Duplex', single: 'Einseitig', frontOnly: 'Nur Vorder', backOnly: 'Nur Rückseite',
+    optBorder: 'Rahmen', optDecade: 'Jahrzehnt-Farbbalken', optAlbum: 'Album-Name',
+    optCutlines: 'Schnittlinien', optInstructions: 'Spielanleitung (1. Seite)', optBlank: 'Leere Karten am Ende',
+    statCards: 'Karten', statPages: 'Seiten', statPrint: 'Seiten Druck',
+    createPdf: 'PDF erstellen', creating: 'PDF wird erstellt...',
+    randomTitle: 'Zufällige Auswahl', randomDesc: 'Wie viele zufällige Karten auswählen?',
+    cancel: 'Abbrechen', select: 'Auswählen',
+  }
+};
+
+let currentLang = localStorage.getItem('tt_lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('tt_lang', lang);
+  document.documentElement.lang = lang;
+
+  // Update buttons
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('lang-de').classList.toggle('active', lang === 'de');
+
+  const t = TRANSLATIONS[lang];
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  // Update select options
+  document.querySelectorAll('option[data-i18n]').forEach(opt => {
+    const key = opt.dataset.i18n;
+    if (t[key] !== undefined) opt.textContent = t[key];
+  });
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
+</script>
+
 </body>
 </html>
