@@ -114,4 +114,4 @@ MIT — free to use, modify and share.
 
 ---
 
-Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspired by the Hitster game
+Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspired by the Hitster game
