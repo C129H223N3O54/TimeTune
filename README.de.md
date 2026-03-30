@@ -114,4 +114,4 @@ MIT — kostenlos nutzbar, veränderbar und weiterzugeben.
 
 ---
 
-Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
+Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
