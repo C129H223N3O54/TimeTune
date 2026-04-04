@@ -414,7 +414,7 @@ function buildBackHTML(track) {
       <div class="card-year-preview" style="font-size:${state.settings.fontsize === 'large' ? '28px' : state.settings.fontsize === 'small' ? '18px' : '22px'};">${track.year || '????'}</div>
       <div class="card-custom-text-wrap">
         <input type="text" class="card-custom-input" data-track-id="${track.id}"
-          value="${escHtml(customText)}" placeholder="✎ add text..." maxlength="30" />
+          value="${escHtml(customText)}" placeholder="${currentLang === 'de' ? '✎ Text hinzufügen...' : '✎ add text...'}" maxlength="30" />
       </div>
       <div class="card-back-logo">TimeTune</div>
     </div>

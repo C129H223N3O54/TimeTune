@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260328" />
+  <link rel="stylesheet" href="style.css?v=20260329" />
   <style>
     .drop-zone {
       border: 2px dashed rgba(233,69,96,0.4);
@@ -80,6 +80,96 @@
     }
     #csv-file-input { display: none; }
 
+    /* HELP BUTTON */
+    #help-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      padding: 0;
+      font-weight: 700;
+      font-size: 14px;
+      border-color: rgba(233,69,96,0.4);
+      color: var(--accent);
+    }
+    #help-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+    /* HELP MODAL */
+    .help-modal-inner {
+      max-width: 520px;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 32px;
+    }
+    .help-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .help-close:hover { color: var(--text); background: var(--bg-elevated); }
+    .help-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #e94560, #f5a623);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+    .help-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .help-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .help-step-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .help-step-content h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .help-step-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .help-step-content a { color: var(--accent); }
+    .help-tip {
+      display: flex;
+      gap: 10px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border-accent);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
     /* LANGUAGE TOGGLE */
     .lang-toggle {
       display: flex;
@@ -129,9 +219,12 @@
       </svg>
       <span class="logo-text">TimeTune</span>
     </div>
-    <div class="lang-toggle">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-ghost btn-sm" id="help-btn" onclick="openHelp()">?</button>
+      <div class="lang-toggle">
       <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
       <button class="lang-btn" id="lang-de" onclick="setLang('de')">DE</button>
+    </div>
     </div>
   </div>
 </header>
@@ -348,15 +441,81 @@
   </div>
 </div>
 
+<!-- HELP MODAL -->
+<div id="help-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeHelp()">
+  <div class="modal help-modal-inner">
+    <button class="help-close" onclick="closeHelp()">✕</button>
+    <h2 class="help-title" data-i18n="helpTitle">How to use TimeTune</h2>
+
+    <div class="help-steps">
+
+      <div class="help-step">
+        <div class="help-step-icon">📄</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep1Title">1. Export & Upload</h4>
+          <p data-i18n="helpStep1Text">Go to <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong>, export your Spotify playlist as CSV and drag it into TimeTune.</p>
+        </div>
+      </div>
+
+      <div class="help-step">
+        <div class="help-step-icon">🎴</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep2Title">2. Flip cards to preview</h4>
+          <p data-i18n="helpStep2Text">Click any card to flip it. The <strong>front</strong> shows the QR code, the <strong>back</strong> shows artist, title and year.</p>
+        </div>
+      </div>
+
+      <div class="help-step">
+        <div class="help-step-icon">📱</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep3Title">3. QR Code</h4>
+          <p data-i18n="helpStep3Text">The QR code on the front links directly to the song on Spotify. Scan it with your phone during the game to play the song.</p>
+        </div>
+      </div>
+
+      <div class="help-step">
+        <div class="help-step-icon">✎</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep4Title">4. Custom text per card</h4>
+          <p data-i18n="helpStep4Text">Flip a card to the back and click the dashed input field to add individual text — e.g. a category or hint. Use <strong>Settings → Custom Text</strong> to add the same text to all cards at once.</p>
+        </div>
+      </div>
+
+      <div class="help-step">
+        <div class="help-step-icon">⚙️</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep5Title">5. Settings</h4>
+          <p data-i18n="helpStep5Text">Choose a color scheme, adjust font size and QR code size — the preview updates live. Select duplex or single-sided printing.</p>
+        </div>
+      </div>
+
+      <div class="help-step">
+        <div class="help-step-icon">🖨️</div>
+        <div class="help-step-content">
+          <h4 data-i18n="helpStep6Title">6. Print & Play</h4>
+          <p data-i18n="helpStep6Text">Click <strong>Create PDF</strong>, print on 200 g/m² cardstock at 100% scale, cut along the dashed lines — and play!</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="help-tip">
+      <span>💡</span>
+      <span data-i18n="helpTip">Tip: Use <strong>duplex printing</strong> so the QR code and the song info are printed on both sides of the same card automatically.</span>
+    </div>
+
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
-<script src="libs/qrcode-gen.js?v=20260328"></script>
-<script src="libs/qrcode.min.js?v=20260328"></script>
-<script src="libs/jspdf.umd.min.js?v=20260328"></script>
-<script src="card-generator.js?v=20260328"></script>
-<script src="pdf-generator.js?v=20260328"></script>
-<script src="app.js?v=20260328"></script>
+<script src="libs/qrcode-gen.js?v=20260329"></script>
+<script src="libs/qrcode.min.js?v=20260329"></script>
+<script src="libs/jspdf.umd.min.js?v=20260329"></script>
+<script src="card-generator.js?v=20260329"></script>
+<script src="pdf-generator.js?v=20260329"></script>
+<script src="app.js?v=20260329"></script>
 
 <script>
 // ============================================
@@ -384,6 +543,20 @@ const TRANSLATIONS = {
     optCutlines: 'Cut lines', optInstructions: 'Game instructions (1st page)', optBlank: 'Blank cards at end',
     statCards: 'Cards', statPages: 'Pages', statPrint: 'Print pages',
     customText: 'Custom Text (back)', customTextPlaceholder: 'e.g. Game Night 2025 (all cards)', customTextHint: 'Shown at the bottom of every card back',
+    helpTitle: 'How to use TimeTune',
+    helpStep1Title: '1. Export & Upload',
+    helpStep1Text: 'Go to <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong>, export your Spotify playlist as CSV and drag it into TimeTune.',
+    helpStep2Title: '2. Flip cards to preview',
+    helpStep2Text: 'Click any card to flip it. The <strong>front</strong> shows the QR code, the <strong>back</strong> shows artist, title and year.',
+    helpStep3Title: '3. QR Code',
+    helpStep3Text: 'The QR code on the front links directly to the song on Spotify. Scan it with your phone during the game to play the song.',
+    helpStep4Title: '4. Custom text per card',
+    helpStep4Text: 'Flip a card to the back and click the dashed input field to add individual text — e.g. a category or hint. Use <strong>Settings → Custom Text</strong> to add the same text to all cards at once.',
+    helpStep5Title: '5. Settings',
+    helpStep5Text: 'Choose a color scheme, adjust font size and QR code size — the preview updates live. Select duplex or single-sided printing.',
+    helpStep6Title: '6. Print & Play',
+    helpStep6Text: 'Click <strong>Create PDF</strong>, print on 200 g/m² cardstock at 100% scale, cut along the dashed lines — and play!',
+    helpTip: 'Tip: Use <strong>duplex printing</strong> so the QR code and the song info are printed on both sides of the same card automatically.',
     createPdf: 'Create PDF', creating: 'Creating PDF...',
     randomTitle: 'Random Selection', randomDesc: 'How many random cards to select?',
     cancel: 'Cancel', select: 'Select',
@@ -409,6 +582,20 @@ const TRANSLATIONS = {
     optCutlines: 'Schnittlinien', optInstructions: 'Spielanleitung (1. Seite)', optBlank: 'Leere Karten am Ende',
     statCards: 'Karten', statPages: 'Seiten', statPrint: 'Seiten Druck',
     customText: 'Eigener Text (Rückseite)', customTextPlaceholder: 'z.B. Spieleabend 2025 (alle Karten)', customTextHint: 'Erscheint unten auf jeder Kartenrückseite',
+    helpTitle: 'So nutzt du TimeTune',
+    helpStep1Title: '1. Exportieren & Hochladen',
+    helpStep1Text: 'Gehe zu <strong><a href="https://exportify.net" target="_blank">exportify.net</a></strong>, exportiere deine Spotify-Playlist als CSV und ziehe sie in TimeTune.',
+    helpStep2Title: '2. Karten umdrehen zur Vorschau',
+    helpStep2Text: 'Klicke auf eine Karte um sie umzudrehen. Die <strong>Vorderseite</strong> zeigt den QR-Code, die <strong>Rückseite</strong> zeigt Artist, Titel und Jahr.',
+    helpStep3Title: '3. QR-Code',
+    helpStep3Text: 'Der QR-Code auf der Vorderseite verlinkt direkt zum Song auf Spotify. Beim Spielen einfach mit dem Handy scannen um den Song abzuspielen.',
+    helpStep4Title: '4. Eigener Text pro Karte',
+    helpStep4Text: 'Karte auf die Rückseite drehen und in das gestrichelte Eingabefeld tippen um individuellen Text hinzuzufügen — z.B. eine Kategorie oder einen Hinweis. Über <strong>Einstellungen → Eigener Text</strong> den gleichen Text auf alle Karten setzen.',
+    helpStep5Title: '5. Einstellungen',
+    helpStep5Text: 'Farbschema wählen, Schriftgröße und QR-Code-Größe anpassen — die Vorschau aktualisiert sich live. Duplex- oder einseitigen Druck wählen.',
+    helpStep6Title: '6. Drucken & Spielen',
+    helpStep6Text: 'Auf <strong>PDF erstellen</strong> klicken, auf 200 g/m² Karton bei 100% Skalierung drucken, entlang der gestrichelten Linien ausschneiden — und los!',
+    helpTip: 'Tipp: Mit <strong>Duplex-Druck</strong> werden QR-Code und Songinfos automatisch auf Vorder- und Rückseite derselben Karte gedruckt.',
     createPdf: 'PDF erstellen', creating: 'PDF wird erstellt...',
     randomTitle: 'Zufällige Auswahl', randomDesc: 'Wie viele zufällige Karten auswählen?',
     cancel: 'Abbrechen', select: 'Auswählen',
@@ -446,6 +633,19 @@ function setLang(lang) {
     if (t[key] !== undefined) opt.textContent = t[key];
   });
 }
+
+function openHelp() {
+  document.getElementById('help-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeHelp() {
+  document.getElementById('help-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHelp(); });
 
 // Init on load
 document.addEventListener('DOMContentLoaded', () => setLang(currentLang));
