@@ -1,5 +1,9 @@
 # 🎵 TimeTune — Musikkarten Generator
 
+Teil der [**Sideforge**](https://github.com/C129H223N3O54/SideForge) Tool-Suite.
+
+> Tools, crafted on the side.
+
 Generiere druckfertige Musikkarten aus deinen Spotify-Playlists für das chronologische Musikraten-Spiel.
 
 👉 **[c129h223n3o54.github.io/TimeTune](https://c129h223n3o54.github.io/TimeTune/)** ← App öffnen
@@ -44,19 +48,32 @@ Karten vorschauen, nach Jahr filtern, Design wählen, PDF erstellen — drucken,
 ## ✨ Features
 
 - **Kein Login, kein Server** — alles läuft im Browser
-- **CSV-Import** via Exportify — einfach & zuverlässig
+- **CSV-Import** via Exportify (und Hitster-CSV-Format automatisch erkannt)
 - **Karten-Vorschau** — klicken zum Umdrehen (3D-Animation)
-- **Individueller Text pro Karte** — Karte umdrehen und eigenen Text eintragen (z.B. Hinweis oder Kategorie)
-- **Globaler Text** — gleichen Text auf alle Karten setzen (z.B. "Spieleabend 2025")
+- **Individueller Text pro Karte** — Karte umdrehen, eigenen Text eintippen
+- **Globaler Text** — gleichen Text auf alle Karten (z.B. "Spieleabend 2025")
 - **Filter & Suche** — nach Jahr, Artist, Titel
 - **Zufalls-Auswahl** — X zufällige Karten aus der Playlist
-- **4 Farbschemas** — Classic, Minimal, Vintage, Neon
+- **4 Farbschemas für gedruckte Karten** — Classic, Minimal, Vintage, Neon
 - **Jahrzehnt-Farbbalken** — sofortige visuelle Dekaden-Erkennung
 - **QR-Code Größe** — Klein / Normal / Groß
 - **Schriftgröße** — Klein / Normal / Groß
-- **Live-Vorschau** — alle Einstellungen aktualisieren die Kartenvorschau sofort
+- **Live-Vorschau** — alle Einstellungen aktualisieren die Vorschau sofort
 - **Duplex / Einseitig / Nur Vorder- / Nur Rückseite** Druckmodi
+- **Light / Dark UI** — Sideforge Design-System
 - **EN / DE** Sprachumschalter
+
+---
+
+## 🎨 Design
+
+TimeTune nutzt das [Sideforge Design-System](https://github.com/C129H223N3O54/SideForge):
+
+- Ember-Orange (`#E8600A`) als Primärfarbe
+- Moss-Grün für Erfolgs-States
+- Anvil warme Grautöne als Neutrals
+- Verdana für UI, Georgia italic für Branding
+- Light + Dark Mode Schalter im Header
 
 ---
 
@@ -85,15 +102,16 @@ Kein Terminal, kein Build-Schritt, keine Konfiguration nötig. ✅
 
 ```
 TimeTune/
-├── index.html          — App UI + i18n (EN/DE)
-├── style.css           — Styling
-├── app.js              — CSV-Import, Karten-Logik, UI
-├── card-generator.js   — Karten-Rendering für PDF
-├── pdf-generator.js    — PDF-Erstellung mit jsPDF
+├── index.html              — App UI + i18n (EN/DE)
+├── sideforge-tokens.css    — Sideforge Design-Tokens
+├── style.css               — App-spezifisches Styling
+├── app.js                  — CSV-Import, Karten-Logik, UI
+├── card-generator.js       — Karten-Rendering für PDF
+├── pdf-generator.js        — PDF-Erstellung mit jsPDF
 └── libs/
-    ├── qrcode-gen.js   — QR-Code Generator
-    ├── qrcode.min.js   — QR-Code API Shim
-    └── jspdf.umd.min.js — PDF Generator
+    ├── qrcode-gen.js       — QR-Code Generator
+    ├── qrcode.min.js       — QR-Code API Shim
+    └── jspdf.umd.min.js    — PDF Generator
 ```
 
 ---
@@ -101,6 +119,7 @@ TimeTune/
 ## 🛠️ Tech Stack
 
 - **Vanilla HTML/CSS/JS** — kein Framework, kein Build-Step
+- **Sideforge Design-System** — gemeinsame Tokens für alle Tools
 - **Exportify** — Spotify-Playlist Export als CSV
 - **qrcode-generator** — clientseitige QR-Code Generierung
 - **jsPDF** — clientseitige PDF-Erstellung
@@ -114,4 +133,4 @@ MIT — kostenlos nutzbar, veränderbar und weiterzugeben.
 
 ---
 
-Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel
+Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspiriert vom Hitster-Spiel | Teil von [Sideforge](https://github.com/C129H223N3O54/SideForge)

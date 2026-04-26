@@ -1,5 +1,9 @@
 # 🎵 TimeTune — Music Card Generator
 
+Part of the [**Sideforge**](https://github.com/C129H223N3O54/SideForge) tool suite.
+
+> Tools, crafted on the side.
+
 Generate print-ready music cards from your Spotify playlists for the chronological music guessing game.
 
 👉 **[c129h223n3o54.github.io/TimeTune](https://c129h223n3o54.github.io/TimeTune/)** ← Open App
@@ -44,19 +48,32 @@ Preview cards, filter by year, choose a design, generate PDF — print, cut, pla
 ## ✨ Features
 
 - **No login, no server** — runs entirely in the browser
-- **CSV import** via Exportify — simple & reliable
+- **CSV import** via Exportify (and Hitster CSV format auto-detected)
 - **Card preview** — click to flip (3D animation)
-- **Individual card text** — flip a card and add custom text per card (e.g. a hint or category)
-- **Global custom text** — add the same text to all cards at once (e.g. "Game Night 2025")
+- **Individual card text** — flip a card and add custom text per card
+- **Global custom text** — same text on all cards (e.g. "Game Night 2025")
 - **Filter & search** — by year, artist, title
 - **Random selection** — pick X random cards from the playlist
-- **4 color themes** — Classic, Minimal, Vintage, Neon
+- **4 color themes** — Classic, Minimal, Vintage, Neon (printed cards)
 - **Decade color bars** — instant visual decade identification
 - **QR code size** — Small / Normal / Large
 - **Font size** — Small / Normal / Large
 - **Live preview** — all settings update the card preview instantly
 - **Duplex / Single-sided / Front-only / Back-only** print modes
+- **Light / Dark UI** — Sideforge design system
 - **EN / DE** language toggle
+
+---
+
+## 🎨 Design
+
+TimeTune uses the [Sideforge design system](https://github.com/C129H223N3O54/SideForge):
+
+- Ember-Orange (`#E8600A`) as primary accent
+- Moss-Green for success states
+- Anvil warm grayscale neutrals
+- Verdana for UI, Georgia italic for branding
+- Light + Dark mode toggle in header
 
 ---
 
@@ -85,15 +102,16 @@ No terminal, no build step, no configuration needed. ✅
 
 ```
 TimeTune/
-├── index.html          — App UI + i18n (EN/DE)
-├── style.css           — Styling
-├── app.js              — CSV import, card logic, UI
-├── card-generator.js   — Card rendering for PDF
-├── pdf-generator.js    — PDF creation with jsPDF
+├── index.html              — App UI + i18n (EN/DE)
+├── sideforge-tokens.css    — Sideforge design tokens
+├── style.css               — App-specific styling
+├── app.js                  — CSV import, card logic, UI
+├── card-generator.js       — Card rendering for PDF
+├── pdf-generator.js        — PDF creation with jsPDF
 └── libs/
-    ├── qrcode-gen.js   — QR code generator
-    ├── qrcode.min.js   — QR code API shim
-    └── jspdf.umd.min.js — PDF generator
+    ├── qrcode-gen.js       — QR code generator
+    ├── qrcode.min.js       — QR code API shim
+    └── jspdf.umd.min.js    — PDF generator
 ```
 
 ---
@@ -101,6 +119,7 @@ TimeTune/
 ## 🛠️ Tech Stack
 
 - **Vanilla HTML/CSS/JS** — no framework, no build step
+- **Sideforge Design System** — shared tokens across all tools
 - **Exportify** — Spotify playlist export as CSV
 - **qrcode-generator** — client-side QR code generation
 - **jsPDF** — client-side PDF creation
@@ -114,4 +133,4 @@ MIT — free to use, modify and share.
 
 ---
 
-Made with ♪ by [JEM](https://github.com/c129h223n3o54) | Inspired by the Hitster game
+Made with ♪ by [kampfmade](https://github.com/c129h223n3o54) | Inspired by the Hitster game | Part of [Sideforge](https://github.com/C129H223N3O54/SideForge)

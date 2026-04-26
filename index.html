@@ -1,36 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TimeTune — Music Card Generator</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%230d0d1a'/><circle cx='16' cy='16' r='14' fill='none' stroke='%23e94560' stroke-width='1.5'/><circle cx='16' cy='16' r='5' fill='%23e94560'/><circle cx='16' cy='16' r='2' fill='%230d0d1a'/></svg>" />
+  <title>Sideforge / TimeTune</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231A1A1A'/><text x='7' y='24' font-family='Georgia,serif' font-style='italic' font-weight='700' font-size='22' fill='%23E8600A'>S</text><text x='18' y='24' font-family='Georgia,serif' font-style='italic' font-weight='700' font-size='22' fill='white'>F</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260329" />
-  <style>
+  <link rel="stylesheet" href="sideforge-tokens.css?v=20260330" />
+  <link rel="stylesheet" href="style.css?v=20260330" />
+    <style>
+    /* ============================================
+       TIMETUNE — INLINE STYLES (Sideforge-aware)
+       ============================================ */
+
+    /* DROP ZONE */
     .drop-zone {
-      border: 2px dashed rgba(233,69,96,0.4);
-      border-radius: 16px;
+      border: 2px dashed var(--sf-accent);
+      border-radius: var(--sf-radius-lg);
       padding: 48px 24px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
-      background: rgba(233,69,96,0.04);
+      transition: all var(--sf-transition-fast);
+      background: var(--sf-accent-soft);
       margin-bottom: 16px;
+      opacity: 0.85;
     }
     .drop-zone:hover, .drop-zone.drag-over {
-      border-color: var(--accent);
-      background: rgba(233,69,96,0.08);
+      border-color: var(--sf-accent-hover);
+      opacity: 1;
     }
     .drop-icon { font-size: 48px; margin-bottom: 12px; display: block; }
-    .drop-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .drop-sub { font-size: 13px; color: var(--text-muted); }
+    .drop-title {
+      font-size: var(--sf-text-md);
+      font-weight: var(--sf-weight-bold);
+      margin-bottom: 6px;
+      color: var(--sf-text);
+    }
+    .drop-sub { font-size: var(--sf-text-sm); color: var(--sf-text-muted); }
+
+    /* EXPORTIFY BOX (now Sideforge card) */
     .exportify-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: var(--sf-surface);
+      border: var(--sf-border-thin) solid var(--sf-border);
+      border-radius: var(--sf-radius-lg);
       padding: 24px;
       margin-bottom: 24px;
     }
@@ -44,53 +58,55 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
+      font-size: var(--sf-text-base);
+      color: var(--sf-text-muted);
+      line-height: var(--sf-leading-base);
     }
     .step-badge {
       width: 22px; height: 22px;
-      background: var(--accent);
+      background: var(--sf-accent);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700;
+      font-size: var(--sf-text-xs);
+      font-weight: var(--sf-weight-bold);
       flex-shrink: 0;
-      color: white;
+      color: var(--sf-text-inverse);
     }
-    .step-text strong { color: var(--text); }
-    .step-text a { color: var(--accent); font-weight: 600; }
-    .setup-num {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 800;
-      color: white;
-      flex-shrink: 0;
-    }
+    .step-text strong { color: var(--sf-text); }
+    .step-text a { color: var(--sf-accent); font-weight: var(--sf-weight-medium); }
+
     .playlist-info-bar {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: var(--sf-surface-alt);
+      border: var(--sf-border-thin) solid var(--sf-border);
+      border-radius: var(--sf-radius-md);
       padding: 10px 16px;
-      font-size: 13px;
-      color: var(--text-muted);
+      font-size: var(--sf-text-sm);
+      color: var(--sf-text-muted);
       margin-bottom: 20px;
-      font-weight: 500;
+      font-weight: var(--sf-weight-medium);
     }
     #csv-file-input { display: none; }
 
-    /* HELP BUTTON */
-    #help-btn {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      padding: 0;
-      font-weight: 700;
-      font-size: 14px;
-      border-color: rgba(233,69,96,0.4);
-      color: var(--accent);
+    /* HEADER CONTROLS */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    #help-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+    .help-btn, .theme-btn {
+      width: 32px; height: 32px;
+      padding: 0;
+      border-radius: 50%;
+      font-weight: var(--sf-weight-bold);
+      border: var(--sf-border-thin) solid var(--sf-border);
+    }
+    .theme-btn .theme-icon-light,
+    .theme-btn .theme-icon-dark {
+      font-size: 16px;
+      line-height: 1;
+    }
+    :root[data-theme="light"] .theme-icon-dark { display: none; }
+    :root[data-theme="dark"] .theme-icon-light { display: none; }
 
     /* HELP MODAL */
     .help-modal-inner {
@@ -105,22 +121,20 @@
       top: 16px; right: 16px;
       background: transparent;
       border: none;
-      color: var(--text-muted);
+      color: var(--sf-text-muted);
       font-size: 18px;
       cursor: pointer;
       padding: 4px 8px;
-      border-radius: 6px;
-      transition: all 0.15s;
+      border-radius: var(--sf-radius-sm);
+      transition: all var(--sf-transition-fast);
     }
-    .help-close:hover { color: var(--text); background: var(--bg-elevated); }
+    .help-close:hover { color: var(--sf-text); background: var(--sf-surface-alt); }
     .help-title {
-      font-family: var(--font-display);
-      font-size: 26px;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #e94560, #f5a623);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-family: var(--sf-font-serif);
+      font-style: italic;
+      font-size: var(--sf-text-xl);
+      font-weight: var(--sf-weight-bold);
+      color: var(--sf-accent);
       margin-bottom: 24px;
     }
     .help-steps {
@@ -139,35 +153,35 @@
       flex-shrink: 0;
       width: 40px;
       height: 40px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: var(--sf-surface-alt);
+      border: var(--sf-border-thin) solid var(--sf-border);
+      border-radius: var(--sf-radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .help-step-content h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
+      font-size: var(--sf-text-base);
+      font-weight: var(--sf-weight-bold);
+      color: var(--sf-text);
       margin-bottom: 4px;
     }
     .help-step-content p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
+      font-size: var(--sf-text-sm);
+      color: var(--sf-text-muted);
+      line-height: var(--sf-leading-loose);
     }
-    .help-step-content a { color: var(--accent); }
+    .help-step-content a { color: var(--sf-accent); }
     .help-tip {
       display: flex;
       gap: 10px;
-      background: var(--accent-dim);
-      border: 1px solid var(--border-accent);
-      border-radius: 10px;
+      background: var(--sf-accent-soft);
+      border: var(--sf-border-thin) solid var(--sf-accent);
+      border-radius: var(--sf-radius-md);
       padding: 14px 16px;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
+      font-size: var(--sf-text-sm);
+      color: var(--sf-text);
+      line-height: var(--sf-leading-base);
     }
 
     /* LANGUAGE TOGGLE */
@@ -175,26 +189,26 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: var(--sf-surface-alt);
+      border: var(--sf-border-thin) solid var(--sf-border);
+      border-radius: var(--sf-radius-md);
       padding: 3px;
     }
     .lang-btn {
       padding: 4px 10px;
       border: none;
       background: transparent;
-      color: var(--text-muted);
-      font-family: var(--font-body);
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 6px;
+      color: var(--sf-text-muted);
+      font-family: var(--sf-font-sans);
+      font-size: var(--sf-text-xs);
+      font-weight: var(--sf-weight-bold);
+      border-radius: var(--sf-radius-sm);
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all var(--sf-transition-fast);
     }
     .lang-btn.active {
-      background: var(--accent);
-      color: white;
+      background: var(--sf-accent);
+      color: var(--sf-text-inverse);
     }
   </style>
 </head>
@@ -205,26 +219,21 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
-    <div class="logo" onclick="document.getElementById('section-login').classList.remove('hidden');document.getElementById('section-tracks').classList.add('hidden');" style="cursor:pointer;">
-      <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="15" stroke="url(#lg1)" stroke-width="1.5"/>
-        <circle cx="16" cy="16" r="5" fill="url(#lg1)"/>
-        <circle cx="16" cy="16" r="2" fill="#1a1a2e"/>
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32">
-            <stop offset="0%" stop-color="#e94560"/>
-            <stop offset="100%" stop-color="#f5a623"/>
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="logo-text">TimeTune</span>
+    <div class="sf-brand" onclick="document.getElementById('section-login').classList.remove('hidden');document.getElementById('section-tracks').classList.add('hidden');" style="cursor:pointer;">
+      <span class="sf-logo"></span>
+      <span class="sf-brand-text">Side<em>forge</em></span>
+      <span class="sf-brand-sub">/ TimeTune</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button class="btn-ghost btn-sm" id="help-btn" onclick="openHelp()">?</button>
+    <div class="header-controls">
+      <button class="sf-btn sf-btn-ghost help-btn" id="help-btn" onclick="openHelp()" title="Help">?</button>
+      <button class="sf-btn sf-btn-ghost theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+        <span class="theme-icon-light">☀</span>
+        <span class="theme-icon-dark">☾</span>
+      </button>
       <div class="lang-toggle">
-      <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="lang-de" onclick="setLang('de')">DE</button>
-    </div>
+        <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="lang-de" onclick="setLang('de')">DE</button>
+      </div>
     </div>
   </div>
 </header>
@@ -510,12 +519,12 @@
 <!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
-<script src="libs/qrcode-gen.js?v=20260329"></script>
-<script src="libs/qrcode.min.js?v=20260329"></script>
-<script src="libs/jspdf.umd.min.js?v=20260329"></script>
-<script src="card-generator.js?v=20260329"></script>
-<script src="pdf-generator.js?v=20260329"></script>
-<script src="app.js?v=20260329"></script>
+<script src="libs/qrcode-gen.js?v=20260330"></script>
+<script src="libs/qrcode.min.js?v=20260330"></script>
+<script src="libs/jspdf.umd.min.js?v=20260330"></script>
+<script src="card-generator.js?v=20260330"></script>
+<script src="pdf-generator.js?v=20260330"></script>
+<script src="app.js?v=20260330"></script>
 
 <script>
 // ============================================
@@ -633,6 +642,20 @@ function setLang(lang) {
     if (t[key] !== undefined) opt.textContent = t[key];
   });
 }
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme') || 'light';
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('tt_theme', next);
+}
+
+// Restore saved theme on load
+(function() {
+  const saved = localStorage.getItem('tt_theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
 
 function openHelp() {
   document.getElementById('help-modal').classList.remove('hidden');
