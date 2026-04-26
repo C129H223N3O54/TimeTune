@@ -56,11 +56,12 @@
     }
     .exportify-step {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 12px;
       font-size: var(--sf-text-base);
       color: var(--sf-text-muted);
       line-height: var(--sf-leading-base);
+      text-align: left;
     }
     .step-badge {
       width: 22px; height: 22px;
@@ -71,7 +72,9 @@
       font-weight: var(--sf-weight-bold);
       flex-shrink: 0;
       color: var(--sf-text-inverse);
+      margin-top: 1px;
     }
+    .step-text { flex: 1; }
     .step-text strong { color: var(--sf-text); }
     .step-text a { color: var(--sf-accent); font-weight: var(--sf-weight-medium); }
 
